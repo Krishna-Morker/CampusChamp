@@ -1,4 +1,5 @@
 // pages/IntroPage.js
+import Link from 'next/link';
 import React from 'react';
 import { FaStar, FaTrophy, FaTasks } from 'react-icons/fa';
 
@@ -34,9 +35,9 @@ const IntroPage = () => {
             </div>
           </div>
 
-          <button className="mt-6 bg-gradient-to-r from-yellow-400 to-pink-500 text-white font-semibold py-3 px-8 rounded-full hover:from-pink-500 hover:to-yellow-400 transition duration-500 ease-in-out transform hover:scale-105">
+          <Link href="/sign-in" className="mt-6 bg-gradient-to-r from-yellow-400 to-pink-500 text-white font-semibold py-3 px-8 rounded-full hover:from-pink-500 hover:to-yellow-400 transition duration-500 ease-in-out transform hover:scale-105">
             Get Started
-          </button>
+          </Link>
         </div>
       </div>
     </div>
