@@ -9,12 +9,18 @@ export default function layout({ children }: Readonly<{ children: React.ReactNod
           Campus Champ
         </h1>
         <div className="space-x-4">
-          <Link href="" className="bg-white text-gray-900 px-4 py-2 rounded-md hover:bg-gray-200 transition duration-300">
+            <Link href="/" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
+            Home
+            </Link>
+
+            <Link href="app/sign-in" className="bg-gray-500 text-black-900 px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">
             Sign In
-          </Link>
-          <Link href="" className="bg-pink-500 px-4 py-2 rounded-md hover:bg-pink-600 transition duration-300">
+            </Link>
+
+            <Link href="app/sign-up" className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300">
             Sign Up
-          </Link>
+            </Link>
+
         </div>
       </nav>
     {children};
