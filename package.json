@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "extra": "ngrok http --url=peacock-divine-herring.ngrok-free.app 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
