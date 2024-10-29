@@ -4,7 +4,7 @@ import Link from 'next/link'
 export default function layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-    <nav className="w-full py-6 px-8 flex justify-between items-center bg-opacity-80 bg-black-900 fixed top-0 z-50 shadow-dark-custom">
+    <nav className="w-full py-6 px-8 flex justify-between items-center bg-opacity-80 bg-black-900 top-0 z-50 shadow-dark-custom">
         <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-500">
           Campus Champ
         </h1>
