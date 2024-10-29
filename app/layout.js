@@ -23,7 +23,11 @@ export default function RootLayout({
   children,
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider  appearance={{
+      elements: {
+        footer: "hidden",
+      },
+    }}>
       <html lang='en'>
        
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >

@@ -14,9 +14,9 @@ export async function POST(req) {
 
   // Get the headers
   const headerPayload =await  headers();
-  const svix_id = await headerPayload.get('svix-id');
-  const svix_timestamp = await headerPayload.get('svix-timestamp');
-  const svix_signature = await headerPayload.get('svix-signature');
+  const svix_id =  headerPayload.get('svix-id');
+  const svix_timestamp =  headerPayload.get('svix-timestamp');
+  const svix_signature =  headerPayload.get('svix-signature');
 
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
@@ -56,8 +56,9 @@ export async function POST(req) {
   // console.log('Webhook body:', body);
 
   if (eventType === 'user.created' || eventType === 'user.updated') {
-    const { id, first_name, last_name, image_url, email_addresses, username } =
+    const { id, first_name, last_name, image_url, email_addresses,external_accounts,username } =
       evt?.data;
+      
     try {
       await createOrUpdateUser(
         id,
@@ -65,6 +66,7 @@ export async function POST(req) {
         last_name,
         image_url,
         email_addresses,
+        external_accounts,
         username
       );
       return new Response('User is created or updated', {
