@@ -4,8 +4,8 @@ import { FaStar, FaTrophy, FaTasks } from 'react-icons/fa';
 
 const IntroPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-indigo-900 via-purple-800 to-blue-900 animate-gradient-x text-white">
-      {/* Navbar */}
+    <div className="min-h-screen bg-gradient-to-r from-blue-900 to-black text-white">
+    
 
       {/* Main Content */}
       <div className="flex flex-col items-center justify-center pt-24 px-6">
