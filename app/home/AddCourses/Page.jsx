@@ -2,18 +2,23 @@
 import React, { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid'; // For the close icon
 import axios from 'axios';
-
+import {useUser} from '@clerk/nextjs';
 
 const CourseModal = ({ isOpen, onClose,gh }) => {
   const [courseName, setCourseName] = useState('');
   const [professorName, setProfessorName] = useState('');
   const [joinCode, setJoinCode] = useState('');
+  const{user}=useUser();
 
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission
     try {
-      const response = await axios.post('/api/course', { courseName, professorName, joinCode });
+      let p=user.id
+    
+     let id=await axios.post('/api/user',{id:p})
+      const fg=id.data._id
+      const response = await axios.post('/api/course', { courseName, professorName, joinCode,id:fg });
       const mes = response.data; // Assuming your server returns a message
       gh(mes); // Close the modal after successful submission
       // Optionally, reset the form fields after submission
