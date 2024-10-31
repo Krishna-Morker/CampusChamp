@@ -15,12 +15,14 @@ export default function layout({ children }) {
             </Link>
             <SignedIn>
                 <UserButton />
-            </SignedIn>
+              </SignedIn>
+           
         </div>
       </nav>
       <main className="pt-20"> {/* Add padding to avoid overlap with navbar */}
         {children} {/* This is where the content of page.tsx will be rendered */}
       </main>
+     
     </>
   )
 }
