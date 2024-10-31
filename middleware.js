@@ -9,10 +9,6 @@ export default clerkMiddleware(async (auth, request) => {
   
   // If the route is public (like sign-in or sign-up)
   if (isPublicRoute(request)) {
-    if (userId) {
-      const homeUrl = new URL('/home', request.url);
-      return NextResponse.redirect(homeUrl); // Redirect to home if signed in
-    }
     return NextResponse.next(); // Allow access to public routes
   }
 

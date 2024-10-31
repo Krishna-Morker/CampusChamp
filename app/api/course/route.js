@@ -1,14 +1,14 @@
-
-
-export async function GET(request) {
-    const body = await request.json();
-   console.log(body);
-   return new Response(JSON.stringify(body));
-   
-}
+import { message } from "antd";
+import { NextResponse } from "next/server";
+import { connect } from "@/lib/mongodb/mongoose";
+import {Addcourse} from "@/lib/actions/course"
 
 export async function POST(request) {
-   const body = await request.json();
-   console.log(body);
-   return new Response(JSON.stringify(body));
+    try {
+        const body = await request.json();
+        const res=await Addcourse(body);
+        return NextResponse.json(res);
+      } catch (error) {
+        console.log('Error deleting user:', error);
+      }
 }

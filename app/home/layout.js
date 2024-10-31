@@ -5,6 +5,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Page from '@/app/home/AddCourses/Page';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Layout({ children }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -18,7 +20,13 @@ export default function Layout({ children }) {
     handleMenuClose(); // Close menu logic
   };
 
-  
+  const gh=(e)=>{
+    toast.success(`${e}`, {
+      position: "top-right"
+  });
+
+    setIsModalOpen(false);
+  }
 
    useEffect( () => {
     try {
@@ -76,7 +84,7 @@ export default function Layout({ children }) {
             
           </Menu>
           {
-              isModalOpen && <Page isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+              isModalOpen && <Page isOpen={isModalOpen} onClose={(e)=>setIsModalOpen(false)}  gh={gh}/>
             }
           <SignedIn>
             <UserButton />
@@ -84,7 +92,8 @@ export default function Layout({ children }) {
         </div>
       </nav>
       <main className="pt-20"> {/* Add padding to avoid overlap with navbar */}
-        {children} {/* This is where the content of page.tsx will be rendered */}
+        {children}
+        <ToastContainer /> {/* This is where the content of page.tsx will be rendered */}
       </main>
     </>
   );

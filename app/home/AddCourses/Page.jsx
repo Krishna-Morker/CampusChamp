@@ -1,19 +1,25 @@
-// components/CourseModal.js
 "use client";
 import React, { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid'; // For the close icon
 import axios from 'axios';
-//import { Addcourse } from '@/lib/actions/course';
 
-const CourseModal = ({ isOpen, onClose }) => {
+
+const CourseModal = ({ isOpen, onClose,gh }) => {
   const [courseName, setCourseName] = useState('');
   const [professorName, setProfessorName] = useState('');
   const [joinCode, setJoinCode] = useState('');
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    const response = await axios.post('http://localhost:3000/api/course', {courseName,professorName,joinCode});
-    onClose();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission
+    try {
+      const response = await axios.post('/api/course', { courseName, professorName, joinCode });
+      const mes = response.data; // Assuming your server returns a message
+      gh(mes); // Close the modal after successful submission
+      // Optionally, reset the form fields after submission
+    } catch (error) {
+      console.error('Error in Creating Course:', error);
+    }
   };
 
   if (!isOpen) return null;
@@ -75,6 +81,7 @@ const CourseModal = ({ isOpen, onClose }) => {
               Cancel
             </button>
             <button
+              onClick={handleSubmit}
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-150"
             >
