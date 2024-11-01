@@ -8,19 +8,23 @@ const CourseModal = ({ isOpen, onClose,gh }) => {
   const [courseName, setCourseName] = useState('');
   const [professorName, setProfessorName] = useState('');
   const [joinCode, setJoinCode] = useState('');
+  const [load,setload]=useState(false);
   const{user}=useUser();
 
 
   const handleSubmit = async (e) => {
+    setload(true);
     e.preventDefault(); // Prevent the default form submission
     try {
       let p=user.id
     
      let id=await axios.post('/api/user',{id:p})
       const fg=id.data._id
-      const response = await axios.post('/api/course', { courseName, professorName, joinCode,id:fg });
+      let ge="add";
+      const response = await axios.post('/api/course', {ge ,courseName, professorName, joinCode,id:fg });
       const mes = response.data; // Assuming your server returns a message
       gh(mes); // Close the modal after successful submission
+      setload(false);
       // Optionally, reset the form fields after submission
     } catch (error) {
       console.error('Error in Creating Course:', error);
@@ -30,6 +34,7 @@ const CourseModal = ({ isOpen, onClose,gh }) => {
   if (!isOpen) return null;
 
   return (
+   
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
       <div className="relative bg-white p-8 rounded-xl shadow-lg w-full max-w-lg transform transition-all duration-300 scale-105">
         {/* Close Button */}
@@ -90,12 +95,13 @@ const CourseModal = ({ isOpen, onClose,gh }) => {
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-150"
             >
-              Submit
+              {load ? 'Loading...' : 'Submit'}
             </button>
           </div>
         </form>
       </div>
     </div>
+   
   );
 };
 

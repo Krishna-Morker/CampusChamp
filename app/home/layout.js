@@ -1,11 +1,11 @@
 "use client";
+import Page from '@/app/home/AddCourses/Page';
 import { SignedIn, UserButton, useUser } from '@clerk/nextjs';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import Page from '@/app/home/AddCourses/Page';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Layout({ children }) {
