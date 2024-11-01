@@ -7,6 +7,7 @@ import {useUser} from '@clerk/nextjs';
 const CourseModal = ({ isOpen, onClose,gh }) => {
   const [courseName, setCourseName] = useState('');
   const [professorName, setProfessorName] = useState('');
+  const [description, setDescription] = useState('');
   const [joinCode, setJoinCode] = useState('');
   const [load,setload]=useState(false);
   const{user}=useUser();
@@ -67,6 +68,17 @@ const CourseModal = ({ isOpen, onClose,gh }) => {
               value={professorName}
               onChange={(e) => setProfessorName(e.target.value)}
               className="w-full text-gray-900 p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-150"
+              required
+            />
+          </div>
+
+          <div className="mb-5">
+            <label className="block text-gray-700 font-semibold mb-2">Course Description:</label>
+            <input
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full p-3 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-150"
               required
             />
           </div>
