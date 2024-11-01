@@ -1,7 +1,7 @@
 import { message } from "antd";
 import { NextResponse } from "next/server";
 import { connect } from "@/lib/mongodb/mongoose";
-import {Addcourse, Getcourse, Mycourse} from "@/lib/actions/course"
+import {Addcourse, Getcourse, Mycourse, Addstudent} from "@/lib/actions/course"
 
 export async function GET(request) {
   try {
@@ -28,6 +28,9 @@ export async function POST(request) {
           return NextResponse.json(res);
         }else if(ge==="mycou"){
           const res=await Mycourse(body.id);
+          return NextResponse.json(res);
+        }else if(ge==="join"){
+          const res=await Addstudent(body);
           return NextResponse.json(res);
         }
       } catch (error) {

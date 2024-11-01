@@ -12,6 +12,7 @@ const CourseModal = ({ isOpen, onClose,gh }) => {
   const{user}=useUser();
 
 
+
   const handleSubmit = async (e) => {
     setload(true);
     e.preventDefault(); // Prevent the default form submission

@@ -64,7 +64,7 @@ const CoursesPage = () => {
                   onClick={() => handleJoinCodeSubmit(course._id)}
                   className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-150"
                 >
-                  Submit Join Code
+                  View Course
                 </button>
               </div>
             ) : (
