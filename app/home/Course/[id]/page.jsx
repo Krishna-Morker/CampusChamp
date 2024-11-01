@@ -71,7 +71,7 @@ useEffect(()=>{
 
       {/* Display assignments */}
       <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
-      {assignments?.length === 0 ? (
+      {(assignments==undefined || assignments.length === 0) ? (
         <h1 className='text-3xl font-bold text-center mb-9 text-gray-800'>No Assignments Available :)</h1>
       ) :  (
         assignments.map((assignment) => (

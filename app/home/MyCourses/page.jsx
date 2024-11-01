@@ -63,21 +63,33 @@ const CoursesPage = () => {
       ) : (
         <div className="grid gap-9 sm:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
-            <div key={course._id} className="relative bg-gray-50 p-10 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+              <div
+              key={course._id}
+              className="bg-gradient-to-br from-gray-600 to-gray-100 p-8 rounded-xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl"
+              style={{
+                background: 'radial-gradient(circle, rgba(156, 163, 175, 1) 20%, rgba(30, 40, 55, 1) 90%)',
+              }}
+            >
              {(prof===1) ? (<button
                 onClick={() => handleDeleteCourse(course._id)}
-                className="absolute top-2 right-2 bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600 transition duration-150"
+                className="absolute top-2 right-2 bg-red-500 text-gray-950 py-1 px-2 rounded-md hover:bg-red-600 transition duration-150"
               >
                 Delete
               </button>) : (<button
                 onClick={() => handleaveCourse(course._id)}
-                className="absolute top-2 right-2 bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600 transition duration-150"
+                className="absolute top-2 right-2 bg-red-500 text-gray-950 py-1 px-2 rounded-md hover:bg-red-600 transition duration-150"
               >
                 Leave
               </button>)}
-              <h2 className="text-2xl text-center font-semibold text-gray-800 mb-2">{course.CourseName}</h2>
-              <p className="text-gray-700 text-center m-4">Professor: {course.ProfessorName}</p>
-              <p className="text-gray-700 text-center m-4">{course.Description}</p>
+              <h2 className="text-2xl text-center font-semibold text-gray-950 mb-4">{course.CourseName}</h2>
+              <div className="text-center">
+        <p className="text-lg text-gray-800 mb-2">
+          <span className="font-semibold text-black-500">Professor: {course.ProfessorName}</span>
+        </p>
+        <p className="text-1xl font-normal text-gray-900 leading-relaxed italic p-4">
+          {course.Description || "No description provided for this course."}
+        </p>
+      </div>
               <button
                 onClick={() => router.push(`/home/Course/${course._id}`)}
                 className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-150"

@@ -65,11 +65,11 @@ export default function Layout({ children }) {
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
           >
-            {!isprof && 
+            
             <MenuItem onClick={handleNavAndClose}>
               <Link href="/home/AllCourses">All Courses</Link>
             </MenuItem>
-            }
+          
             <MenuItem onClick={handleNavAndClose}>
               <Link href="/home/MyCourses">My Courses</Link>
             </MenuItem>
