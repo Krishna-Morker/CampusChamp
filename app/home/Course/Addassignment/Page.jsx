@@ -23,13 +23,15 @@ const Page = ({ isOpen, onClose ,courseId}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const ge="addass"
     try {
     const data={
         courseId,
         title,
         description,
         dueDate,
-        urls
+        urls,
+        ge
     }
     const res=await axios.post('/api/assignment',data)
     toast.success("Assignment added successfully");

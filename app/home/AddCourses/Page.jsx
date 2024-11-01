@@ -28,7 +28,7 @@ const CourseModal = ({ isOpen, onClose,gh }) => {
       setload(false);
       // Optionally, reset the form fields after submission
     } catch (error) {
-      console.error('Error in Creating Course:', error);
+      console.log('Error in Creating Course:', error);
     }
   };
 
