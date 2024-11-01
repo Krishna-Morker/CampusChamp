@@ -42,7 +42,7 @@ export default function Layout({ children }) {
   
   return (
     <>
-      <nav className="w-full py-6 px-8 flex justify-between items-center bg-opacity-80 bg-gray-900 fixed top-0 z-50 shadow-dark-custom">
+      <nav className="w-full py-6 px-8 flex justify-between items-center bg-opacity-80 bg-gray-900 top-0 z-50 shadow-dark-custom">
         <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-500">
           Campus Champ
         </h1>
@@ -91,8 +91,8 @@ export default function Layout({ children }) {
           </SignedIn>
         </div>
       </nav>
-      <main className="pt-20"> {/* Add padding to avoid overlap with navbar */}
-        {children}
+      <main > {/* Add padding to avoid overlap with navbar */}
+        {children }
         <ToastContainer /> {/* This is where the content of page.tsx will be rendered */}
       </main>
     </>
