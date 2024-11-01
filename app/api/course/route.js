@@ -1,15 +1,17 @@
 import { message } from "antd";
 import { NextResponse } from "next/server";
 import { connect } from "@/lib/mongodb/mongoose";
-import {Addcourse, Getcourse, Mycourse, Addstudent} from "@/lib/actions/course"
+import {Addcourse, Getcourse, Mycourse, Addstudent,Removestudent} from "@/lib/actions/course"
 
-export async function GET(request) {
+export async function DELETE(request) {
   try {
-    console.log("svsrvrr")
-    const body =  request.query;
-    console.log(body,"get");
+    const url = new URL(request.url); // Create a URL object from the request URL
+    const id = url.searchParams.get('id'); // Get the course ID from the query string
+    const userid = url.searchParams.get('userid'); // Get the user ID from the query string
+    const res=await Removestudent({courseid:id,userid:userid})
+    return NextResponse.json("");
     } catch (error) {
-      console.log('Error deleting user:', error);
+      console.log('Error in course api', error);
     }
 }
 
@@ -34,6 +36,6 @@ export async function POST(request) {
           return NextResponse.json(res);
         }
       } catch (error) {
-        console.log('Error deleting user:', error);
+        console.log('Error in course api', error);
       }
 }
