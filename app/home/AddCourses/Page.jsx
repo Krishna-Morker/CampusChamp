@@ -23,7 +23,7 @@ const CourseModal = ({ isOpen, onClose,gh }) => {
      let id=await axios.post('/api/user',{id:p})
       const fg=id.data._id
       let ge="add";
-      const response = await axios.post('/api/course', {ge ,courseName, professorName, joinCode,id:fg });
+      const response = await axios.post('/api/course', {ge ,courseName, professorName, description, joinCode,id:fg });
       const mes = response.data; // Assuming your server returns a message
       gh(mes); // Close the modal after successful submission
       setload(false);
