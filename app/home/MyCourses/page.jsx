@@ -75,6 +75,7 @@ const CoursesPage = () => {
               </button>)}
               <h2 className="text-2xl text-center font-semibold text-gray-800 mb-2">{course.CourseName}</h2>
               <p className="text-gray-700 text-center m-4">Professor: {course.ProfessorName}</p>
+              <p className="text-gray-700 text-center m-4">{course.Description}</p>
               <button
                 onClick={() => {/* Implement visit course logic here */}}
                 className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-150"

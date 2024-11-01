@@ -69,6 +69,7 @@ const CoursesPage = () => {
           <div key={course._id} className="bg-gray-50 p-10 rounded-lg shadow-lg transition-transform transform hover:scale-105">
             <h2 className="text-2xl text-center font-semibold text-gray-800 mb-2">{course.CourseName}</h2>
             <p className="text-gray-700 text-center m-4">Professor: {course.ProfessorName}</p>
+            <p className="text-gray-700 text-center m-4"> {course.Description}</p>
 
             {joinCodeVisible === course._id ? (
               <div>
