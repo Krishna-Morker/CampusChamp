@@ -3,8 +3,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { set } from 'mongoose';
+import { useRouter } from 'next/navigation';
 
 const CoursesPage = () => {
+  const router = useRouter();
   const [courses, setCourses] = useState([]);
   const [joinCodeVisible, setJoinCodeVisible] = useState(null);
   const [inputJoinCode, setInputJoinCode] = useState('');
@@ -76,7 +78,7 @@ const CoursesPage = () => {
               <h2 className="text-2xl text-center font-semibold text-gray-800 mb-2">{course.CourseName}</h2>
               <p className="text-gray-700 text-center m-4">Professor: {course.ProfessorName}</p>
               <button
-                onClick={() => {/* Implement visit course logic here */}}
+                onClick={() => router.push(`/home/Course/${course._id}`)}
                 className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-150"
               >
                 Visit Course
