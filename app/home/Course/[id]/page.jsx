@@ -27,7 +27,8 @@ const AssignmentsPage = ({ params }) => {
       const p = user.id;
       const idResponse = await axios.post('/api/user', { id: p });
       const fg = idResponse.data._id;
-      setstid(fg);
+      setstid(idResponse.data);
+      console.log(idResponse.data,"student");
     } catch (error) {
       console.log("Error fetching assignments:", error);
     }
@@ -49,6 +50,7 @@ const AssignmentsPage = ({ params }) => {
 
   const onClose = () => {
     setIsModalOpen(false);
+    fetchAssignments();
   };
 
   const handleFileUpload = async (e, assignmentId) => {
@@ -73,7 +75,7 @@ const AssignmentsPage = ({ params }) => {
         id: assignmentId,
         fileName: file.name,
         fileURL,
-        studentid: stid,
+        studentid: stid._id,
       };
 
       const ge = "addstu";
@@ -95,7 +97,7 @@ const AssignmentsPage = ({ params }) => {
   const handleRemoveFile = async (assID) => {
     const ge = "removestu";
     try {
-      await axios.post(`/api/assignment`, { ge, assID, stid });
+      await axios.post(`/api/assignment`, { ge, assID, stid:stid._id });
       toast.info("Assignment removed.");
       // Fetch assignments again to reflect the latest state
       fetchAssignments();
@@ -108,6 +110,7 @@ const AssignmentsPage = ({ params }) => {
   return (
     <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
       <div className="max-w-3xl mx-auto">
+        {(stid && (stid?.prof==1)) ?
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-semibold text-white-800">Assignments</h1>
           <button
@@ -116,8 +119,8 @@ const AssignmentsPage = ({ params }) => {
           >
             + Add New Assignment
           </button>
-        </div>
-
+        </div> : <h1 className="text-3xl mb-8 font-semibold text-white-800">Assignments</h1>}
+      
         <div className="space-y-6">
           {assignments.length === 0 ? (
             <h2 className="text-center text-lg font-medium text-white">
@@ -141,47 +144,61 @@ const AssignmentsPage = ({ params }) => {
                     href={assignment.assignmenturl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-100 underline hover:text-blue-100 mb-4 inline-block transition-colors duration-150"
+                    className="text-blue-600 bg-gray-900 rounded-md py-2 px-4 underline hover:text-blue-100 mb-4 inline-block transition-colors duration-150"
                   >
                     Download Assignment
                   </a>
                 )}
-
-
-<div key={assignment._id} className="mt-4 space-y-2">
-  {assignment.uploads && assignment.uploads.length > 0 ? (
-    assignment.uploads.map((file) => {
-      if (file.studentId == stid) {
-        return (
-          <div 
-            key={`${assignment._id}-${file.filename}`} // Ensure uniqueness
-            className="flex items-center justify-between bg-gray-800 p-3 rounded-md"
-          >
-            <a
-              href={file.fileUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-100 underline hover:text-blue-200"
-            >
-              {file.filename}
-            </a>
-            <button
-              onClick={() => handleRemoveFile(assignment._id)}
-              className="text-red-500 hover:text-red-600 transition-colors duration-150 ml-4"
-            >
-              Remove
-            </button>
-          </div>
-        );
-      }
-      return null; // Return null if studentId doesn't match
-    })
-  ) : (
-    <p>No files uploaded.</p>
-  )}
-</div>
-
-
+                
+                {stid?.prof=== 1 ? (
+                  <div className="flex space-x-4">
+                  <button
+                    onClick={isOpen} // Replace with the function to open the modal or perform other actions
+                    className="bg-gradient-to-r from-green-500 to-teal-600 text-white mt-4 py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-150"
+                  >
+                  View Student's Submitted Assignment
+                  </button>
+                  <button
+                    onClick={() => {/* Add the function or action for this button */}}
+                    className="bg-gradient-to-r from-red-500 to-pink-600 text-white mt-4 py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-150"
+                  >
+                  View Student's Not Submitted
+                  </button>
+                </div>
+                ) : (
+                  <>
+                <div key={assignment._id} className="mt-4 space-y-2">
+                  {assignment.uploads && assignment.uploads.length > 0 ? (
+                    assignment.uploads.map((file) => {
+                      if (file.studentId == stid?._id) {
+                        return (
+                          <div 
+                            key={`${assignment._id}-${file.filename}`} // Ensure uniqueness
+                            className="flex items-center justify-between bg-gray-800 p-3 rounded-md"
+                          >
+                            <a
+                              href={file.fileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-100 underline hover:text-blue-200"
+                            >
+                              {file.filename}
+                            </a>
+                            <button
+                              onClick={() => handleRemoveFile(assignment._id)}
+                              className="text-red-500 hover:text-red-600 transition-colors duration-150 ml-4"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        );
+                      }
+                      return null; // Return null if studentId doesn't match
+                    })
+                  ) : (
+                    <p>No files uploaded.</p>
+                  )}
+                </div>
                 {/* File upload form */}
                 <form onSubmit={(e) => handleFileUpload(e, assignment._id)} className="mt-4">
                   <input
@@ -203,12 +220,15 @@ const AssignmentsPage = ({ params }) => {
                     {loading[assignment._id] ? "Uploading..." : "Upload Assignment"}
                   </button>
                 </form>
+                </>
+                )}
               </div>
             ))
           )}
         </div>
 
         {isModalOpen && <Page isOpen={isOpen} onClose={onClose} courseId={courseId} />}
+
       </div>
     </div>
   );

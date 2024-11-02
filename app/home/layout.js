@@ -24,7 +24,7 @@ export default function Layout({ children }) {
     toast.success(`${e}`, {
       position: "top-right"
   });
-
+  
     setIsModalOpen(false);
   }
 
