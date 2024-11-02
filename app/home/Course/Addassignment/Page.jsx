@@ -5,11 +5,13 @@ import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { useEdgeStore } from '@/lib/edgestore';
 import { toast } from 'react-toastify';
+import { fileURLToPath } from 'url';
 
 const Page = ({ isOpen, onClose ,courseId}) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [progress,setprogress]=useState(0);
   const {edgestore} = useEdgeStore();
   const [urls,setUrls]=useState(null)
   const [file, setFile] = useState(null);
@@ -17,22 +19,42 @@ const Page = ({ isOpen, onClose ,courseId}) => {
   const { user } = useUser();
 
   const handleFileChange = (e) => {
-    setFile(e.target.files?.[0]);
+    setFile(e.target.files[0]);
   };
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let fileURL;
     setLoading(true);
+    if (file) {
+      // Upload the file and update progress
+      const uploadResponse = await edgestore.myProtectedFiles.upload({
+        file,
+        onProgressChange: (progress) => {
+          setprogress(progress);
+        },
+      });
+
+      setUrls(uploadResponse.url);
+      
+      //console.log(uploadResponse.url)
+      fileURL=uploadResponse.url
+      //console.log(urls)
+    }
+    
     const ge="addass"
+  //  console.log(urls);
     try {
     const data={
-        courseId,
-        title,
-        description,
-        dueDate,
-        urls,
+        courseId:courseId,
+        title:title,
+        description:description,
+        dueDate:dueDate,
+        urls:fileURL,
         ge
     }
+  
+    
     const res=await axios.post('/api/assignment',data)
     toast.success("Assignment added successfully");
       onClose(); // Close the modal after successful submission
@@ -98,6 +120,15 @@ const Page = ({ isOpen, onClose ,courseId}) => {
               className="w-full p-3 text-gray-900 border border-gray-300 rounded-md focus:outline-none"
               required
             />
+             <div className="h-[6px] w-full border rounded overflow-hidden">
+              <div
+              className="h-full bg-gray-900 transition-all duration-150"
+              style={{
+                width:`${progress}%`
+              }}
+              >
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-end space-x-3">
@@ -108,15 +139,11 @@ const Page = ({ isOpen, onClose ,courseId}) => {
             >
               Cancel
             </button>
+           
+            
             <button
-             onClick={async()=>{
-                if(file){
-                  const res=await edgestore.myProtectedFiles.upload({file});
-                  setUrls(res.url)
-                }
-              }}
+            className="bg-gray-500 test-gray rounded px-2 hover:opacity-80"
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-150"
             >
               {loading ? 'Loading...' : 'Submit'}
             </button>

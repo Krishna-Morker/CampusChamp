@@ -11,22 +11,23 @@ const CoursesPage = () => {
   const [inputJoinCode, setInputJoinCode] = useState('');
   const { user } = useUser();
   const [userid,setuserid]=useState(null);
+  const fetchCourses = async () => {
+    try {
+      let p = user.id;
+      let id = await axios.post('/api/user', { id: p });
+      const fg = id.data._id;
+      setuserid(fg)
+      const ge = "get";
+      const response = await axios.post('/api/course', { ge, id: fg });
+      setCourses(response?.data);
+    } catch (error) {
+      console.log('Error fetching courses:', error);
+    }
+  };
 
   // Fetch courses from the backend
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        let p = user.id;
-        let id = await axios.post('/api/user', { id: p });
-        const fg = id.data._id;
-        setuserid(fg)
-        const ge = "get";
-        const response = await axios.post('/api/course', { ge, id: fg });
-        setCourses(response?.data);
-      } catch (error) {
-        console.log('Error fetching courses:', error);
-      }
-    };
+   
     fetchCourses();
   }, [user]);
 
