@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {Addassignment,getAssigment,Addstudent,delStudent} from "@/lib/actions/assignment"
+import {Addassignment,getAssigment,Addstudent,delStudent,Absentass} from "@/lib/actions/assignment"
 
 export async function POST(request) {
     try {
@@ -21,6 +21,9 @@ export async function POST(request) {
           return NextResponse.json(res);
         }else if(ge==="removestu"){
           const res=await delStudent(body)
+          return NextResponse.json(res);
+        }else if(ge==="absent"){
+          const res=await Absentass(body)
           return NextResponse.json(res);
         }
       } catch (error) {

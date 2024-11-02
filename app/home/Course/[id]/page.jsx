@@ -5,6 +5,7 @@ import Page from '@/app/home/Course/Addassignment/Page';
 import { toast } from 'react-toastify';
 import { useUser } from '@clerk/nextjs';
 import { useEdgeStore } from '@/lib/edgestore';
+import { useRouter } from 'next/navigation';
 
 const AssignmentsPage = ({ params }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,6 +13,7 @@ const AssignmentsPage = ({ params }) => {
   const [courseId, setCourseId] = useState(null);
   const [progress, setProgress] = useState({});
   const { edgestore } = useEdgeStore();
+  const router = useRouter();
   const [loading, setLoading] = useState({});
   const [file, setFile] = useState(null);
   const [stid, setstid] = useState(null);
@@ -153,13 +155,13 @@ const AssignmentsPage = ({ params }) => {
                 {stid?.prof=== 1 ? (
                   <div className="flex space-x-4">
                   <button
-                    onClick={isOpen} // Replace with the function to open the modal or perform other actions
+                    onClick={() => router.push(`/home/Assignment/${assignment._id}/present`)} 
                     className="bg-gradient-to-r from-green-500 to-teal-600 text-white mt-4 py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-150"
                   >
                   View Student's Submitted Assignment
                   </button>
                   <button
-                    onClick={() => {/* Add the function or action for this button */}}
+                     onClick={() => router.push(`/home/Assignment/${assignment._id}/absent`)} 
                     className="bg-gradient-to-r from-red-500 to-pink-600 text-white mt-4 py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-150"
                   >
                   View Student's Not Submitted
