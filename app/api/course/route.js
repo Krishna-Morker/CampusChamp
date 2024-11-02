@@ -1,6 +1,4 @@
-import { message } from "antd";
 import { NextResponse } from "next/server";
-import { connect } from "@/lib/mongodb/mongoose";
 import {Addcourse, Getcourse, Mycourse, Addstudent,Removestudent,DeletCourse} from "@/lib/actions/course"
 
 export async function DELETE(request) {

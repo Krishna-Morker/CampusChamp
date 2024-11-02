@@ -2,6 +2,7 @@ import { ClerkProvider, ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
 import Loader from '@/components/Loader';
 import localFont from "next/font/local";
 import "./globals.css";
+import { EdgeStoreProvider } from '@/lib/edgestore';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,7 +37,7 @@ export default function RootLayout({
           </ClerkLoading>
           <ClerkLoaded>
          
-            {children}
+           <EdgeStoreProvider>{children}</EdgeStoreProvider> 
           </ClerkLoaded>
         </body>
       </html>
