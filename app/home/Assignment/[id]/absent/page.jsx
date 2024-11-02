@@ -29,7 +29,7 @@ function Page({ params }) {
   }, [assignmentId]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-300 py-8 px-4">
+    <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6">Student Submission Status</h1>
 

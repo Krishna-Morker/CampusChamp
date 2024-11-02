@@ -102,7 +102,7 @@ function Page({ params }) {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-300 py-8 px-4">
+    <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
