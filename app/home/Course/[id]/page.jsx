@@ -99,6 +99,7 @@ const AssignmentsPage = ({ params }) => {
   const handleRemoveFile = async (assID) => {
     const ge = "removestu";
     try {
+      
       await axios.post(`/api/assignment`, { ge, assID, stid:stid._id });
       toast.info("Assignment removed.");
       // Fetch assignments again to reflect the latest state
@@ -108,7 +109,20 @@ const AssignmentsPage = ({ params }) => {
       toast.error("Failed to remove assignment.");
     }
   };
-
+  const remass = async (ASSID) => {
+   
+    try {
+      const ge = "remass";
+      
+      await axios.post(`/api/assignment`, { ge, ASSID});
+      toast.info("Assignment removed.");
+      // Fetch assignments again to reflect the latest state
+      fetchAssignments();
+    } catch (error) {
+      console.log("Error removing file:", error);
+      toast.error("Failed to remove assignment.");
+    }
+  };
   return (
     <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
       <div className="max-w-3xl mx-auto">
@@ -165,6 +179,12 @@ const AssignmentsPage = ({ params }) => {
                     className="bg-gradient-to-r from-red-500 to-pink-600 text-white mt-4 py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-150"
                   >
                   View Student's Not Submitted
+                  </button>
+                  <button
+                     onClick={()=>remass(assignment._id)} 
+                    className="bg-gradient-to-r from-red-500 to-pink-600 text-white mt-4 py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-150"
+                  >
+                  Remove assignment
                   </button>
                 </div>
                 ) : (

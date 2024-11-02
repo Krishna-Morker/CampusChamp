@@ -54,7 +54,7 @@ const Page = ({ isOpen, onClose ,courseId}) => {
         ge
     }
   
-    console.log(data)
+    
     const res=await axios.post('/api/assignment',data)
     toast.success("Assignment added successfully");
       onClose(); // Close the modal after successful submission
