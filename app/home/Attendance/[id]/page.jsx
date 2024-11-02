@@ -30,6 +30,29 @@ function AttendancePage({ params }) {
     if (id) setCourseId(id);
   }, [id]);
 
+  // Check if attendance has already been submitted for the current date
+  useEffect(() => {
+    const checkAttendanceStatus = async () => {
+      try {
+        const ge="attstatus"
+        const response = await axios.post(`/api/attendance`, {
+          courseId, date ,ge
+        });
+        if (response.data) {
+          setSubmitted(true);
+        } else {
+          setSubmitted(false); 
+        }
+      } catch (error) {
+        console.error("Error checking attendance status:", error);
+      }
+    };
+
+    if (courseId && date) {
+      checkAttendanceStatus();
+    }
+  }, [courseId, date]);
+
   const handleAttendanceChange = (studentId, status) => {
     setAttendanceStatus((prevStatus) => ({
       ...prevStatus,
@@ -38,19 +61,14 @@ function AttendancePage({ params }) {
   };
 
   const submitAttendance = async () => {
-    console.log(attendanceStatus);
-    const response=await axios.post('/api/attendance', { attendanceStatus, courseId, date })
-    // const promises = Object.entries(attendanceStatus).map(([studentId, status]) =>
-    //   axios.post('/api/attendance', { studentId, courseId, status, date })
-    // );
-    
-    // await Promise.all(promises);
-    // toast.success("Attendance submitted successfully");
-    // setSubmitted(true); // Set submitted to true
+    const ge="submitattendance"
+    const response = await axios.post('/api/attendance', { attendanceStatus, courseId, date, ge });
+    toast.success(response.data.message);
+    setSubmitted(true); // Set submitted to true
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4">
+    <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
       <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6">Course Attendance</h1>
 
@@ -60,7 +78,7 @@ function AttendancePage({ params }) {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="border border-gray-300 p-2 rounded w-full"
+            className="border text-gray-700 border-gray-300 p-2 rounded w-full"
           />
         </div>
 
@@ -71,27 +89,32 @@ function AttendancePage({ params }) {
             students.map((student) => (
               <div
                 key={student._id}
-                className={`flex items-center justify-between p-4 border rounded-md 
+                className={`flex items-center p-4 border rounded-md 
                   ${submitted ? 'opacity-50 cursor-not-allowed' : ''} 
                   ${attendanceStatus[student._id] === 'Present' ? 'border-green-500 bg-green-100' : 
                     attendanceStatus[student._id] === 'Absent' ? 'border-red-500 bg-red-100' : 'border-gray-300'}`}
               >
-                <div>
+                <img
+                  src={student.avatar} // Using a placeholder avatar
+                  alt={student.username}
+                  className="w-12 h-12 rounded-full mr-4"
+                />
+                <div className="flex-grow">
                   <h2 className="text-lg font-medium text-gray-700">{student.username}</h2>
                   <p className="text-gray-600">Email: {student.email}</p>
                 </div>
-                <div className="flex space-x-4">
+                <div className="flex space-x-2">
                   <button
                     onClick={() => handleAttendanceChange(student._id, "Present")}
                     disabled={submitted || attendanceStatus[student._id] === 'Present'}
-                    className={`bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition ${submitted ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`bg-green-500 text-white py-1 px-3 rounded-full hover:bg-green-600 transition ${submitted ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     Present
                   </button>
                   <button
                     onClick={() => handleAttendanceChange(student._id, "Absent")}
                     disabled={submitted || attendanceStatus[student._id] === 'Absent'}
-                    className={`bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600 transition ${submitted ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`bg-red-500 text-white py-1 px-3 rounded-full hover:bg-red-600 transition ${submitted ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     Absent
                   </button>
