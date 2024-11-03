@@ -54,9 +54,7 @@ export default function Layout({ children }) {
           {(isprof==1) ?
           <Link href="/home/Attendance" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
             Attendance
-          </Link> :   <Link href="/home/Attendance/user" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
-            Attendance
-          </Link>
+          </Link> :   <></>
           }
           
           {/* Menu Trigger Button */}
