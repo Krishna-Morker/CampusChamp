@@ -8,11 +8,23 @@ import { useRouter } from 'next/navigation';
 const CoursesPage = () => {
   const router = useRouter();
   const [courses, setCourses] = useState([]);
-  const [joinCodeVisible, setJoinCodeVisible] = useState(null);
-  const [inputJoinCode, setInputJoinCode] = useState('');
+  const [attendance, setAttendance] = useState(null);
   const { user } = useUser();
   const [prof,isprof]=useState(0);
   const [userd,setuserd]=useState(null);
+
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get('/api/attendance/courses');
+      setCourses(response.data);
+    } catch (error) {
+      console.error("Error fetching courses with attendance:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
 
   // Fetch courses from the backend
   useEffect(() => {
@@ -57,11 +69,12 @@ const CoursesPage = () => {
 
   return (
     <div className="p-8 bg-gradient-to-b from-gray-600 to-gray-50 min-h-screen">
-      <h1 className="text-5xl font-bold text-center mb-8 text-white-800">Take Attendance</h1>
+          <div className="max-w-3xl mx-auto bg-gray-400 rounded-lg shadow-2xl p-6">
+      <h1 className="text-5xl font-bold text-center mb-8 text-gray-800">My Courses</h1>
       {courses.length === 0 ? (
         <h1 className='text-3xl font-bold text-center mb-9 text-gray-800'>No Courses Available :)</h1>
       ) : (
-        <div className="grid gap-9 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-9 grid-cols-1">
           {courses.map((course) => (
               <div
               key={course._id}
@@ -70,36 +83,27 @@ const CoursesPage = () => {
                 background: 'radial-gradient(circle, rgba(156, 163, 175, 1) 20%, rgba(30, 40, 55, 1) 90%)',
               }}
             >
-             {(prof===1) ? (<button
-                onClick={() => handleDeleteCourse(course._id)}
-                className="absolute top-2 right-2 bg-red-500 text-gray-950 py-1 px-2 rounded-md hover:bg-red-600 transition duration-150"
-              >
-                Delete
-              </button>) : (<button
-                onClick={() => handleaveCourse(course._id)}
-                className="absolute top-2 right-2 bg-red-500 text-gray-950 py-1 px-2 rounded-md hover:bg-red-600 transition duration-150"
-              >
-                Leave
-              </button>)}
-              <h2 className="text-2xl text-center font-semibold text-gray-950 mb-4">{course.CourseName}</h2>
-              <div className="text-center">
-        <p className="text-lg text-gray-800 mb-2">
-          <span className="font-semibold text-black-500">Professor: {course.ProfessorName}</span>
+           
+              <h2 className="text-2xl text-left font-semibold text-white-950 mb-4">{course.CourseName}</h2>
+              <div className="text-left">
+        <p className="text-lg text-white-800 mb-2">
+          <span className="font-semibold text-white-500">Professor: {course.ProfessorName}</span>
         </p>
         <p className="text-1xl font-normal text-gray-900 leading-relaxed italic p-4">
           {course.Description || "No description provided for this course."}
         </p>
       </div>
               <button
-                onClick={() => router.push(`/home/Attendance/${course._id}`)}
+                onClick={() => router.push(`/home/Course/${course._id}`)}
                 className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-150"
               >
-                Take Attendance
+                See Attendance
               </button>
             </div>
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 };
