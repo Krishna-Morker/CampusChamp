@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {Addcourse, Getcourse, Mycourse, Addstudent,Removestudent,DeletCourse} from "@/lib/actions/course"
+import {Addcourse, Getcourse, Mycourse, Addstudent,Removestudent,DeletCourse, Getstudent} from "@/lib/actions/course"
 
 export async function DELETE(request) {
   try {
@@ -39,6 +39,9 @@ export async function POST(request) {
           return NextResponse.json(res);
         }else if(ge==="join"){
           const res=await Addstudent(body);
+          return NextResponse.json(res);
+        }else if(ge==="coursestudent"){
+          const res=await Getstudent(body);
           return NextResponse.json(res);
         }
       } catch (error) {

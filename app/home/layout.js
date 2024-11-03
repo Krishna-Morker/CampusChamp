@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function Layout({ children }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const { isLoaded, isSignedIn, user } = useUser();
+  const [stid, setstid] = useState(null);
   const [isprof,setisprof]=useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -50,13 +51,18 @@ export default function Layout({ children }) {
           <Link href="/home" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
             Home
           </Link>
+          {(isprof==1) ?
+          <Link href="/home/Attendance" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
+            Attendance
+          </Link> :   <></>
+          }
           
           {/* Menu Trigger Button */}
           <button
             onClick={handleMenuOpen}
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
           >
-            Menu
+            Courses
           </button>
           
           {/* Dropdown Menu */}
