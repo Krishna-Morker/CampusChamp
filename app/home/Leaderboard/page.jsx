@@ -15,13 +15,9 @@ const Leaderboard = () => {
             const response = await axios.get('/api/leaderboard');
             const result = response.data;
             
-            // console.log(result);
+            console.log(result);
 
-            if (result.success) {
-                setLeaderboard(result.data);
-            } else {
-                throw new Error(result.message || 'Failed to fetch leaderboard');
-            }
+            setLeaderboard(result);
         } catch (err) {
             setError(err.message);
         }
@@ -34,12 +30,38 @@ const Leaderboard = () => {
   }, []);
 
   return (
-    <>
-        <div>
-            <h1>All Users</h1>
-            
-        </div>
-    </>
+    
+    <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 className="text-2xl font-semibold text-gray-800 mb-6">Student Leaderboard</h1>
+
+        {leaderboard.length === 0 ? (
+          <p className="text-center text-gray-600">No student data available.</p>
+        ) : (
+          <div className="space-y-4">
+            {leaderboard.map((student) => (
+              <div
+                key={student._id}
+                className="flex items-center p-4 border border-gray-300 rounded-md shadow-sm transition-transform transform hover:scale-105"
+              >
+                <img
+                  src={student.avatar}
+                  alt={`${student.username}'s avatar`}
+                  className="w-12 h-12 rounded-full mr-4"
+                />
+                <div className="flex-grow">
+                  <h2 className="text-lg font-medium text-gray-700">{student.username}</h2>
+                  <p className="text-gray-600 mb-1">Email: {student.email}</p>
+                  <p className="text-gray-600 mb-1">Aura Points: {student.points}</p>
+                </div>
+
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+
   );
 };
 
