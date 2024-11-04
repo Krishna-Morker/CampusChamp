@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { set } from 'mongoose';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation'
 
 const CoursesPage = () => {
   const router = useRouter();
@@ -12,7 +13,11 @@ const CoursesPage = () => {
   const [inputJoinCode, setInputJoinCode] = useState('');
   const { user } = useUser();
   const [prof,isprof]=useState(0);
+  const searchParams = useSearchParams()
   const [userd,setuserd]=useState(null);
+  const type= searchParams.get('type')
+
+
 
   // Fetch courses from the backend
   useEffect(() => {
@@ -91,7 +96,7 @@ const CoursesPage = () => {
         </p>
       </div>
               <button
-                onClick={() => router.push(`/home/daily-challenges/${course._id}`)}
+                onClick={() => router.push(`/home/daily-challenges/${course._id}?type=${type}`)}
                 className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-150"
               >
                 Visit Challenges

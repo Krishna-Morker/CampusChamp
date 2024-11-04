@@ -6,7 +6,7 @@ import { useUser } from '@clerk/nextjs';
 import { useEdgeStore } from '@/lib/edgestore';
 import { toast } from 'react-toastify';
 
-const Page = ({ isOpen, onClose, courseId }) => {
+const Page = ({ isOpen, onClose, courseId, type}) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -42,6 +42,7 @@ const Page = ({ isOpen, onClose, courseId }) => {
         description,
         dueDate: new Date(dueDate), // Convert to Date object with both date and time
         urls: fileURL,
+        type,
         ge
       };
 

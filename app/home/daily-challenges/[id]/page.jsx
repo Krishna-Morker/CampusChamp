@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useUser } from '@clerk/nextjs';
 import { useEdgeStore } from '@/lib/edgestore';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation'
 
 const AssignmentsPage = ({ params }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,12 +19,17 @@ const AssignmentsPage = ({ params }) => {
   const [file, setFile] = useState(null);
   const [stid, setstid] = useState(null);
   const { id } = use(params);
+  const [load, setLoad] = useState(true);
+  const searchParams = useSearchParams()
   const { user } = useUser();
+
+  const type= searchParams.get('type')
+
 
   const fetchAssignments = async () => {
     try {
       const ge = "add";
-      const response = await axios.post(`/api/challenges`, { id: courseId, ge });
+      const response = await axios.post(`/api/challenges`, { id: courseId, ge,type });
       setAssignments(response.data);
       console.log(response.data);
       const p = user.id;
@@ -37,7 +43,7 @@ const AssignmentsPage = ({ params }) => {
   };
 
   useEffect(() => {
-    if (courseId) {
+    if (courseId &&type) {
       fetchAssignments(); // Fetch assignments when the courseId is set
     }
   }, [courseId, user.id]); // Depend on courseId and user.id
@@ -78,6 +84,7 @@ const AssignmentsPage = ({ params }) => {
         fileName: file.name,
         fileURL,
         studentid: stid._id,
+        type,
       };
 
       const ge = "addstu";
@@ -100,7 +107,7 @@ const AssignmentsPage = ({ params }) => {
     const ge = "removestu";
     try {
       
-      await axios.post(`/api/challenges`, { ge, assID, stid:stid._id });
+      await axios.post(`/api/challenges`, { ge, assID, stid:stid._id,type });
       toast.info("Assignment removed.");
       // Fetch assignments again to reflect the latest state
       fetchAssignments();
@@ -114,7 +121,7 @@ const AssignmentsPage = ({ params }) => {
     try {
       const ge = "remass";
       
-      await axios.post(`/api/challenges`, { ge, ASSID});
+      await axios.post(`/api/challenges`, { ge, ASSID,type});
       toast.info("Assignment removed.");
       // Fetch assignments again to reflect the latest state
       fetchAssignments();
@@ -169,7 +176,7 @@ const AssignmentsPage = ({ params }) => {
                 {stid?.prof=== 1 ? (
                   <div className="flex space-x-4">
                   <button
-                    onClick={() => router.push(`/home/Challenges/${assignment._id}/present`)} 
+                    onClick={() => router.push(`/home/Challenges/${assignment._id}/?type=${type}`)} 
                     className="bg-gradient-to-r from-green-500 to-teal-600 text-white mt-4 py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-150"
                   >
                   View Student's Submitted challenges
@@ -243,7 +250,7 @@ const AssignmentsPage = ({ params }) => {
           )}
         </div>
 
-        {isModalOpen && <Page isOpen={isOpen} onClose={onClose} courseId={courseId} />}
+        {isModalOpen && <Page isOpen={isOpen} onClose={onClose} courseId={courseId} type={type} />}
 
       </div>
     </div>

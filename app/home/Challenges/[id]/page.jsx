@@ -2,11 +2,14 @@
 import axios from 'axios';
 import { use, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { useSearchParams } from 'next/navigation'
 
 function Page({ params }) {
   const { id } = use(params);
   const [assignmentId, setAssignmentId] = useState(null);
   const [students, setStudents] = useState([]);
+  const searchParams = useSearchParams();
+  const type= searchParams.get('type')
 
   useEffect(() => {
     if (id) setAssignmentId(id);
@@ -16,6 +19,7 @@ function Page({ params }) {
       const ge = "present";
       const response = await axios.post("/api/challenges", {
         id: assignmentId,
+        type,
         ge,
       });
       console.log(response.data, "user");
@@ -36,6 +40,7 @@ function Page({ params }) {
       const response = await axios.post("/api/challenges", {
         assignmentId,
         studentId,
+        type,
         ge,
       });
       toast.success(response.data);
