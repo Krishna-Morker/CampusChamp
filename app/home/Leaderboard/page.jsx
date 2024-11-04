@@ -9,15 +9,15 @@ const Leaderboard = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchLeaderboard = async () => {
-    setLoading(true); // Set loading to true before fetching data
+    setLoading(true);
     try {
       const response = await axios.get('/api/leaderboard');
-      setLeaderboard(response.data); // Update leaderboard data
-      setError(null); // Clear any previous error
+      setLeaderboard(response.data);
+      setError(null);
     } catch (err) {
       setError("Failed to load leaderboard data. Please try again later.");
     } finally {
-      setLoading(false); // Always stop loading when done
+      setLoading(false);
     }
   };
 
@@ -26,35 +26,36 @@ const Leaderboard = () => {
   }, []);
 
   if (loading) return <Loader />;
-  if (error) return <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>;
+  if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#1f1f2e' }}>
-      <table style={{ width: '80%', maxWidth: '800px', backgroundColor: '#2b2b3a', color: '#ffffff', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)', textAlign: 'left', borderCollapse: 'collapse' }}>
+    <div className="flex justify-center items-start pt-8 h-screen bg-gray-900"
+    style={{ backgroundColor: '#242527' }}>
+      <table className="w-11/12 md:w-3/4 lg:w-2/3 max-w-4xl bg-gray-800 text-white shadow-md rounded-lg overflow-hidden">
         <thead>
-          <tr>
-            <th style={{ padding: '12px', borderBottom: '2px solid #4CAF50', backgroundColor: '#33334d', color: '#4CAF50' }}>Rank</th>
-            <th style={{ padding: '12px', borderBottom: '2px solid #4CAF50', backgroundColor: '#33334d', color: '#4CAF50' }}>Avatar</th>
-            <th style={{ padding: '12px', borderBottom: '2px solid #4CAF50', backgroundColor: '#33334d', color: '#4CAF50' }}>Username</th>
-            <th style={{ padding: '12px', borderBottom: '2px solid #4CAF50', backgroundColor: '#33334d', color: '#4CAF50' }}>Points</th>
-            <th style={{ padding: '12px', borderBottom: '2px solid #4CAF50', backgroundColor: '#33334d', color: '#4CAF50' }}>Email</th>
+          <tr className="bg-gray-700">
+            <th className="py-3 px-4 border-b-2 border-green-500 text-green-400">Rank</th>
+            <th className="py-3 px-4 border-b-2 border-green-500 text-green-400">Avatar</th>
+            <th className="py-3 px-4 border-b-2 border-green-500 text-green-400">Username</th>
+            <th className="py-3 px-4 border-b-2 border-green-500 text-green-400">Points</th>
+            <th className="py-3 px-4 border-b-2 border-green-500 text-green-400">Email</th>
           </tr>
         </thead>
         <tbody>
           {leaderboard.map((student, index) => {
             const isEvenRow = index % 2 === 0;
-            const backgroundColor = isEvenRow ? '#3b3b4f' : '#2b2b3a';
+            const rowBgColor = isEvenRow ? 'bg-gray-800' : 'bg-gray-700';
             const rank = index + 1;
 
             return (
-              <tr key={student.clerkId} style={{ backgroundColor }}>
-                <td style={{ padding: '12px', borderBottom: '1px solid #444' }}>{rank}</td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #444' }}>
-                  <img src={student.avatar} alt={`${student.username}`} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+              <tr key={student.clerkId} className={`${rowBgColor} hover:bg-gray-600`}>
+                <td className="py-3 px-4 border-b border-gray-600 text-center">{rank}</td>
+                <td className="py-3 px-4 border-b border-gray-600 flex justify-center">
+                  <img src={student.avatar} alt={student.username} className="w-10 h-10 rounded-full" />
                 </td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #444' }}>{student.username}</td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #444' }}>{student.points}</td>
-                <td style={{ padding: '12px', borderBottom: '1px solid #444' }}>{student.email}</td>
+                <td className="py-3 px-4 border-b border-gray-600">{student.username}</td>
+                <td className="py-3 px-4 border-b border-gray-600 text-center">{student.points}</td>
+                <td className="py-3 px-4 border-b border-gray-600">{student.email}</td>
               </tr>
             );
           })}

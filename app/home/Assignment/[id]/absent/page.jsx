@@ -35,12 +35,14 @@ function Page({ params }) {
     return <Loader/>
   }
   return (
-    <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-semibold text-gray-800 mb-6">Student Submission Status</h1>
+    <div className="p-8 min-h-screen"
+    style={{ backgroundColor: '#242527' }}>
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6"
+       style={{  backgroundColor: '#31363f'}}>
+        <h1 className="text-2xl font-semibold text-white-800 mb-6">Student Submission Status</h1>
 
         {students.length === 0 ? (
-          <p className="text-center text-gray-600">No student data available.</p>
+          <p className="text-center text-white-600">No student data available.</p>
         ) : (
           <div className="space-y-4">
             {students.map((student) => (
@@ -54,8 +56,8 @@ function Page({ params }) {
                   className="w-12 h-12 rounded-full mr-4"
                 />
                 <div className="flex-grow">
-                  <h2 className="text-lg font-medium text-gray-700">{student.username}</h2>
-                  <p className="text-gray-600 mb-1">Email: {student.email}</p>
+                  <h2 className="text-lg font-medium text-white-700">{student.username}</h2>
+                  <p className="text-white-600 mb-1">Email: {student.email}</p>
                   {student.assignmentUrl && (
                     <a
                       href={student.assignmentUrl}

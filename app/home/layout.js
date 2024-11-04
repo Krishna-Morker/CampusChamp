@@ -27,6 +27,7 @@ export default function Layout({ children }) {
     setAnchorElCourses(null);
     setAnchorElChallenges(null);
   };
+  
   const handle = () => {
     setAnchorElCourses(null);
     setAnchorElChallenges(null);
@@ -50,27 +51,28 @@ export default function Layout({ children }) {
 
   return (
     <>
-      <nav className="w-full py-6 px-8 flex justify-between items-center bg-opacity-80 bg-gray-900 top-0 z-50 shadow-dark-custom">
-        <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-500">
+      <nav className="w-full py-4 px-8 flex justify-between items-center shadow-lg text-white"
+      style={{ backgroundColor: '#171a1f' }}>
+        <h1 className="text-3xl font-extrabold">
           Campus Champ
         </h1>
-        <div className="space-x-4">
-          <Link href="/home" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
+        <div className="flex items-center space-x-6">
+          <Link href="/home"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
             Home
           </Link>
-          <Link href="/home/Leaderboard" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
+          <Link href="/home/Leaderboard"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
             Leaderboard
           </Link>
-          {(isProf==1) ?
-          <Link href="/home/Attendance" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
-            Attendance
-          </Link> :   <></>
-          }
-          
+          {isProf && (
+            <Link href="/home/Attendance"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
+              Attendance
+            </Link>
+          )}
+
           {/* Menu Trigger Button */}
           <button
             onClick={(e) => handleMenuOpen(e, 'courses')}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+            className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300"
           >
             Courses
           </button>
@@ -92,10 +94,10 @@ export default function Layout({ children }) {
             )}
           </Menu>
 
-          {/* Job Portal Menu Trigger */}
+          {/* Challenges Menu Trigger */}
           <button
             onClick={(e) => handleMenuOpen(e, 'Challenges')}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+            className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300"
           >
             Challenges
           </button>
@@ -105,13 +107,13 @@ export default function Layout({ children }) {
             onClose={handleMenuClose}
           >
             <MenuItem onClick={handleMenuClose}>
-            <Link href={{ pathname: '/home/daily-challenges', query: { type: 'daily' } }}>  Daily Challenges </Link>
+              <Link href={{ pathname: '/home/daily-challenges', query: { type: 'daily' } }}>Daily Challenges</Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
-            <Link href={{ pathname: '/home/daily-challenges', query: { type: 'weekly' } }}>  Weekly Challenges </Link>
+              <Link href={{ pathname: '/home/daily-challenges', query: { type: 'weekly' } }}>Weekly Challenges</Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
-            <Link href={{ pathname: '/home/daily-challenges', query: { type: 'monthly' } }}>  Monthly Challenges </Link>
+              <Link href={{ pathname: '/home/daily-challenges', query: { type: 'monthly' } }}>Monthly Challenges</Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
               <Link href="/job-portal/my-applied-jobs">Friendly Challenges</Link>
@@ -121,7 +123,7 @@ export default function Layout({ children }) {
           {isModalOpen && (
             <Page isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} gh={showToast} />
           )}
-          
+
           <SignedIn>
             <UserButton />
           </SignedIn>

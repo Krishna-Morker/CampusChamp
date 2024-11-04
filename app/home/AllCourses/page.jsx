@@ -61,31 +61,30 @@ const CoursesPage = () => {
   };
   if (loading) return <Loader />;
   return (
-    <div className="p-8 bg-gradient-to-b from-gray-600 to-gray-50 min-h-screen">
+    <div className="p-8 min-h-screen"
+    style={{ backgroundColor: '#242527' }}>
       <h1 className="text-5xl font-bold text-center mb-8 text-white-800">
         Available Courses
       </h1>
       {courses.length === 0 ? (
-        <h1 className='text-3xl font-bold text-center mb-9 text-gray-800'>No Avaliable Courses:)</h1 >
+        <h1 className='text-3xl font-bold text-center mb-9 text-white-800'>No Avaliable Courses:)</h1 >
       ) :
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 px-4">
   {courses.map((course) => (
     <div
     key={course._id}
-    className="bg-gradient-to-br from-gray-600 to-gray-100 p-8 rounded-xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl"
-    style={{
-      background: 'radial-gradient(circle, rgba(156, 163, 175, 1) 20%, rgba(30, 40, 55, 1) 90%)',
-    }}
+    className="p-8 rounded-xl shadow-2xl hover:scale-105 hover:shadow-2xl"
+    style={{  backgroundColor: '#31363f'}}
   >
-      <h2 className="text-2xl font-bold text-center text-gray-950 mb-4">
+      <h2 className="text-3xl font-extrabold underline text-center text-white-950 mb-7">
         {course.CourseName}
       </h2>
 
       <div className="text-center">
-        <p className="text-lg text-gray-800 mb-2">
+        <p className="text-lg text-white-800 mb-2">
           <span className="font-semibold text-black-900">Professor: {course.ProfessorName}</span>
         </p>
-        <p className="font-normal text-1xl text-gray-900 leading-relaxed italic p-3">
+        <p className="font-normal text-1xl text-white-900 leading-relaxed italic p-3">
           {course.Description || "No description provided for this course."}
         </p>
       </div>

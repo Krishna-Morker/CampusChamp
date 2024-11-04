@@ -43,7 +43,7 @@ const AssignmentsPage = ({ params }) => {
     if (courseId) {
       fetchAssignments(); // Fetch assignments when the courseId is set
     }
-  }, [courseId, user.id]); // Depend on courseId and user.id
+  }, [courseId, user?.id]); // Depend on courseId and user.id
 
   useEffect(() => {
     if (id) setCourseId(id);
@@ -130,7 +130,8 @@ const AssignmentsPage = ({ params }) => {
     return <Loader/>  
   }
   return (
-    <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
+    <div className="p-8 min-h-screen"
+    style={{ backgroundColor: '#242527' }}>
       <div className="max-w-3xl mx-auto">
         {(stid && (stid?.prof==1)) ?
         <div className="flex items-center justify-between mb-8">
@@ -152,10 +153,8 @@ const AssignmentsPage = ({ params }) => {
             assignments.map((assignment) => (
               <div
                 key={assignment._id}
-                className="bg-gradient-to-br from-gray-600 to-gray-100 p-8 rounded-xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl text-white"
-                style={{
-                  background: 'radial-gradient(circle, rgba(156, 163, 175, 1) 20%, rgba(30, 40, 55, 1) 90%)',
-                }}
+                className="p-8 rounded-xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl text-white"
+                style={{  backgroundColor: '#31363f'}}
               >
                 <h2 className="text-2xl font-semibold text-white mb-2">{assignment.title}</h2>
                 <p className="text-white mb-4">{assignment.description}</p>
@@ -166,7 +165,7 @@ const AssignmentsPage = ({ params }) => {
                     href={assignment.assignmenturl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 bg-gray-900 rounded-md py-2 px-4 underline hover:text-blue-100 mb-4 inline-block transition-colors duration-150"
+                    className="text-white-600 bg-gray-900 rounded-md py-2 px-4 underline hover:text-blue-100 mb-4 inline-block transition-colors duration-150"
                   >
                     Download Assignment
                   </a>

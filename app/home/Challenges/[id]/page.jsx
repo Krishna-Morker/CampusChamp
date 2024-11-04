@@ -26,6 +26,7 @@ function Page({ params }) {
       });
     
       setStudents(response.data); // Assuming response.data is an array of students
+      console.log(response.data);
       setLoading(false);
     } catch (error) {
       console.log("Error fetching student data:", error);
@@ -109,11 +110,13 @@ function Page({ params }) {
   }
 
   return (
-    <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+    <div className="p-8 min-h-screen"
+    style={{ backgroundColor: '#242527' }}>
+      <div className="max-w-4xl mx-auto rounded-lg shadow-lg p-6"
+      style={{  backgroundColor: '#31363f'}}>
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-800">On-Time Submissions</h2>
+            <h2 className="text-xl font-semibold text-white-800">On-Time Submissions</h2>
             <button
               onClick={() => handleAssignGlobalPoints(true)}
               className="bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-150"
@@ -122,7 +125,7 @@ function Page({ params }) {
             </button>
           </div>
           {onTimeStudents.length === 0 ? (
-            <p className="text-center text-gray-600">No students submitted on time.</p>
+            <p className="text-center text-white-600">No students submitted on time.</p>
           ) : (
             <div className="space-y-4">
               {onTimeStudents.map((student) => (
@@ -136,9 +139,9 @@ function Page({ params }) {
                     className="w-12 h-12 rounded-full mr-4"
                   />
                   <div className="flex-grow">
-                    <h2 className="text-lg font-medium text-gray-700">{student.user.username}</h2>
-                    <p className="text-gray-600 mb-1">Email: {student.user.email}</p>
-                    <p className="text-gray-600 mb-1">Total Points: {student.user.points}</p>
+                    <h2 className="text-lg font-medium text-white-700">{student.user.username}</h2>
+                    <p className="text-white-600 mb-1">Email: {student.user.email}</p>
+                    <p className="text-white-600 mb-1">Total Points: {student.user.points}</p>
                     <a
                       href={student.fileUrl}
                       target="_blank"

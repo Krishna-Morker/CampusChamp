@@ -67,7 +67,7 @@ const Page = ({ isOpen, onClose, courseId, type}) => {
         </button>
 
         <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2 border-blue-500">
-          Upload Assignment
+          Upload Challenge
         </h2>
 
         <form onSubmit={handleSubmit}>
