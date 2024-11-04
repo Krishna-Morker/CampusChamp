@@ -9,38 +9,40 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Layout({ children }) {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElCourses, setAnchorElCourses] = useState(null);
+  const [anchorElChallenges, setAnchorElChallenges] = useState(null);
   const { isLoaded, isSignedIn, user } = useUser();
-  const [stid, setstid] = useState(null);
-  const [isprof,setisprof]=useState(false);
+  const [isProf, setIsProf] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
-  const handleMenuClose = () => setAnchorEl(null);
-  const handleNavAndClose = (e) => {
-    handleMenuClose(); // Close menu logic
+  const handleMenuOpen = (event, menu) => {
+    if (menu === 'courses') {
+      setAnchorElCourses(event.currentTarget);
+    } else if (menu === 'Challenges') {
+      setAnchorElChallenges(event.currentTarget);
+    }
   };
 
-  const gh=(e)=>{
-    toast.success(`${e}`, {
-      position: "top-right"
-  });
-  
-    setIsModalOpen(false);
-  }
+  const handleMenuClose = () => {
+    setAnchorElCourses(null);
+    setAnchorElChallenges(null);
+  };
 
-   useEffect( () => {
-    try {
-      const email=user?.primaryEmailAddress?.emailAddress
-   if (isLoaded && isSignedIn && user?.id) {
-    const regex = /^[a-zA-Z0-9._%+-]+@mnnit\.ac\.in$/;
-    setisprof(regex.test(email));
+  const showToast = (message) => {
+    toast.success(message, {
+      position: "top-right",
+    });
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user?.id) {
+      const email = user?.primaryEmailAddress?.emailAddress;
+      const regex = /^[a-zA-Z0-9._%+-]+@mnnit\.ac\.in$/;
+      setIsProf(regex.test(email));
     }
-    } catch (error) {
-     console.log(error); 
-    }
- },[user])
-  
+  }, [user, isLoaded, isSignedIn]);
+
   return (
     <>
       <nav className="w-full py-6 px-8 flex justify-between items-center bg-opacity-80 bg-gray-900 top-0 z-50 shadow-dark-custom">
@@ -51,57 +53,75 @@ export default function Layout({ children }) {
           <Link href="/home" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
             Home
           </Link>
-          {(isprof==1) ?
-          <Link href="/home/Attendance" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
-            Attendance
-          </Link> :   <></>
-          }
-          
-          {/* Menu Trigger Button */}
+          {isProf && (
+            <Link href="/home/Attendance" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
+              Attendance
+            </Link>
+          )}
+
+          {/* Courses Menu Trigger */}
           <button
-            onClick={handleMenuOpen}
+            onClick={(e) => handleMenuOpen(e, 'courses')}
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
           >
             Courses
           </button>
-          
-          {/* Dropdown Menu */}
           <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
+            anchorEl={anchorElCourses}
+            open={Boolean(anchorElCourses)}
             onClose={handleMenuClose}
           >
-            
-            <MenuItem onClick={handleNavAndClose}>
+            <MenuItem onClick={handleMenuClose}>
               <Link href="/home/AllCourses">All Courses</Link>
             </MenuItem>
-          
-            <MenuItem onClick={handleNavAndClose}>
+            <MenuItem onClick={handleMenuClose}>
               <Link href="/home/MyCourses">My Courses</Link>
             </MenuItem>
-            {isprof  &&
-            <MenuItem onClick={handleNavAndClose}>
-              {/* <Link href="/home/AddCourses">Add Courses</Link> */}
-              <button
-        onClick={() => setIsModalOpen(true)}
-      >
-        Add Course
-      </button>
-            </MenuItem>
-            } 
-            
+            {isProf && (
+              <MenuItem onClick={() => setIsModalOpen(true)}>
+                Add Course
+              </MenuItem>
+            )}
           </Menu>
-          {
-              isModalOpen && <Page isOpen={isModalOpen} onClose={(e)=>setIsModalOpen(false)}  gh={gh}/>
-            }
+
+          {/* Job Portal Menu Trigger */}
+          <button
+            onClick={(e) => handleMenuOpen(e, 'Challenges')}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+          >
+            Challenges
+          </button>
+          <Menu
+            anchorEl={anchorElChallenges}
+            open={Boolean(anchorElChallenges)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={handleMenuClose}>
+              <Link href="/home/daily-challenges">Daily Challenges</Link>
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <Link href="/job-portal/post">Weekly challenges</Link>
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <Link href="/job-portal/my-posted-jobs">Monthly Challenges</Link>
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <Link href="/job-portal/my-applied-jobs">Friendly Challenges</Link>
+            </MenuItem>
+          </Menu>
+
+          {isModalOpen && (
+            <Page isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} gh={showToast} />
+          )}
+          
           <SignedIn>
             <UserButton />
           </SignedIn>
         </div>
       </nav>
-      <main > {/* Add padding to avoid overlap with navbar */}
-        {children }
-        <ToastContainer /> {/* This is where the content of page.tsx will be rendered */}
+      <main>
+        {children}
+        <ToastContainer />
       </main>
     </>
   );

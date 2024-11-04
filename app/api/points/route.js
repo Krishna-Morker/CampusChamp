@@ -1,4 +1,4 @@
-import {incPoints,Points} from '@/lib/actions/points';
+import {incPoints,Points,ChallengePoints} from '@/lib/actions/points';
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
@@ -11,7 +11,10 @@ export async function POST(request) {
         }else if(ge==="addextra"){
         const res=await incPoints(body);
         return NextResponse.json(res);
-        }
+        }else if(ge==="addchall"){
+          const res=await ChallengePoints(body);
+          return NextResponse.json(res);
+          }
       } catch (error) {
         console.log('Error deleting user:', error);
       }
