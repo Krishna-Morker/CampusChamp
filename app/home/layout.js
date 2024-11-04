@@ -27,12 +27,17 @@ export default function Layout({ children }) {
     setAnchorElCourses(null);
     setAnchorElChallenges(null);
   };
+  const handle = () => {
+    setAnchorElCourses(null);
+    setAnchorElChallenges(null);
+    setIsModalOpen(true);
+  };
 
   const showToast = (message) => {
     toast.success(message, {
       position: "top-right",
     });
-    setIsModalOpen(false);
+    setIsModalOpen(true);
   };
 
   useEffect(() => {
@@ -52,6 +57,9 @@ export default function Layout({ children }) {
         <div className="space-x-4">
           <Link href="/home" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
             Home
+          </Link>
+          <Link href="/home/Leaderboard" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
+            Leaderboard
           </Link>
           {(isProf==1) ?
           <Link href="/home/Attendance" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
@@ -78,7 +86,7 @@ export default function Layout({ children }) {
               <Link href="/home/MyCourses">My Courses</Link>
             </MenuItem>
             {isProf && (
-              <MenuItem onClick={() => setIsModalOpen(true)}>
+              <MenuItem onClick={handle}>
                 Add Course
               </MenuItem>
             )}
@@ -100,10 +108,10 @@ export default function Layout({ children }) {
             <Link href={{ pathname: '/home/daily-challenges', query: { type: 'daily' } }}>  Daily Challenges </Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
-              <Link href="/job-portal/post">Weekly challenges</Link>
+            <Link href={{ pathname: '/home/daily-challenges', query: { type: 'weekly' } }}>  Weekly Challenges </Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
-              <Link href="/job-portal/my-posted-jobs">Monthly Challenges</Link>
+            <Link href={{ pathname: '/home/daily-challenges', query: { type: 'monthly' } }}>  Monthly Challenges </Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
               <Link href="/job-portal/my-applied-jobs">Friendly Challenges</Link>

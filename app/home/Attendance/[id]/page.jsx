@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { use, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import Loader from '@/components/Loader';
 
 function AttendancePage({ params }) {
   const [students, setStudents] = useState([]);
@@ -10,7 +11,8 @@ function AttendancePage({ params }) {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [attendanceStatus, setAttendanceStatus] = useState({});
   const [submitted, setSubmitted] = useState(false); // Track if attendance is submitted
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(true); // Loading state
+ 
 
   // Fetch students when courseId changes
   useEffect(() => {
@@ -20,6 +22,7 @@ function AttendancePage({ params }) {
         const ge = "coursestudent";
         const response = await axios.post(`/api/course`, { id: courseId, ge });
         setStudents(response.data);
+        setload(false);
       } catch (error) {
         console.log("Error fetching students:", error);
       } finally {
@@ -91,6 +94,9 @@ function AttendancePage({ params }) {
       console.error(error);
     }
   };
+  if(loading){
+    return <Loader/>
+  }
 
   return (
     <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
@@ -110,9 +116,7 @@ function AttendancePage({ params }) {
           />
         </div>
 
-        {loading ? ( // Show loading state
-          <p className="text-center text-gray-600">Loading students...</p>
-        ) : (
+       
           <div className="space-y-4 mb-6">
             {students.length === 0 ? (
               <p className="text-center text-gray-600">No students found for this course.</p>
@@ -154,7 +158,6 @@ function AttendancePage({ params }) {
               ))
             )}
           </div>
-        )}
 
         <button
           onClick={submitAttendance}

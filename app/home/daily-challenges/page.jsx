@@ -5,7 +5,7 @@ import { useUser } from '@clerk/nextjs';
 import { set } from 'mongoose';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation'
-
+import Loader from '@/components/Loader';
 const CoursesPage = () => {
   const router = useRouter();
   const [courses, setCourses] = useState([]);
@@ -16,6 +16,7 @@ const CoursesPage = () => {
   const searchParams = useSearchParams()
   const [userd,setuserd]=useState(null);
   const type= searchParams.get('type')
+  const [loading, setLoading] = useState(true);
 
 
 
@@ -32,6 +33,7 @@ const CoursesPage = () => {
         const ge = "mycou";
         const response = await axios.post(`/api/course`, { ge, id: fg });
         setCourses(response?.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
@@ -59,10 +61,10 @@ const CoursesPage = () => {
   };
   
 
-
+  if(loading) return <Loader/>
   return (
     <div className="p-8 bg-gradient-to-b from-gray-600 to-gray-50 min-h-screen">
-      <h1 className="text-5xl font-bold text-center mb-8 text-white-800">All Courses</h1>
+      <h1 className="text-5xl font-bold text-center mb-8 text-white-800">All Courses [{type}]</h1>
       {courses.length === 0 ? (
         <h1 className='text-3xl font-bold text-center mb-9 text-gray-800'>No Courses Available :)</h1>
       ) : (

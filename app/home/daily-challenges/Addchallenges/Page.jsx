@@ -47,11 +47,11 @@ const Page = ({ isOpen, onClose, courseId, type}) => {
       };
 
       await axios.post('/api/challenges', data);
-      toast.success("Assignment added successfully");
+      toast.success("Challenge added successfully");
       onClose(); // Close the modal after successful submission
     } catch (error) {
-      console.error('Error uploading assignment:', error);
-      alert("Failed to upload assignment");
+      console.error('Error uploading Challenge:', error);
+      alert("Failed to upload Challenge");
     } finally {
       setLoading(false);
     }

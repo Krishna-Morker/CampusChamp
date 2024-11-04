@@ -1,11 +1,14 @@
 "use client";
 import axios from 'axios';
 import {use, useState, useEffect } from 'react';
+import Loader from '@/components/Loader';
+
 
 function Page({ params }) {
   const { id } = use(params);
   const [assignmentId, setAssignmentId] = useState(null);
   const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (id) setAssignmentId(id);
@@ -20,6 +23,7 @@ function Page({ params }) {
           ge,
         });
         setStudents(response.data); // Assuming response.data is an array of students
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching student data:", error);
       }
@@ -27,7 +31,9 @@ function Page({ params }) {
 
     if (assignmentId) fetchStudentData();
   }, [assignmentId]);
-
+  if(loading){
+    return <Loader/>
+  }
   return (
     <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">

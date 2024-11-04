@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useUser } from '@clerk/nextjs';
 import { useEdgeStore } from '@/lib/edgestore';
 import { useRouter } from 'next/navigation';
+import Loader from '@/components/Loader';
 
 const AssignmentsPage = ({ params }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,6 +16,7 @@ const AssignmentsPage = ({ params }) => {
   const { edgestore } = useEdgeStore();
   const router = useRouter();
   const [loading, setLoading] = useState({});
+  const [load, setLoad] = useState(true);
   const [file, setFile] = useState(null);
   const [stid, setstid] = useState(null);
   const { id } = use(params);
@@ -30,6 +32,7 @@ const AssignmentsPage = ({ params }) => {
       const idResponse = await axios.post('/api/user', { id: p });
       const fg = idResponse.data._id;
       setstid(idResponse.data);
+      setLoad(false);
       console.log(idResponse.data,"student");
     } catch (error) {
       console.log("Error fetching assignments:", error);
@@ -123,6 +126,9 @@ const AssignmentsPage = ({ params }) => {
       toast.error("Failed to remove assignment.");
     }
   };
+  if(load){
+    return <Loader/>  
+  }
   return (
     <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
       <div className="max-w-3xl mx-auto">

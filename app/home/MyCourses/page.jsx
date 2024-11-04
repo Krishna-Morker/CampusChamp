@@ -4,12 +4,12 @@ import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { set } from 'mongoose';
 import { useRouter } from 'next/navigation';
+import Loader from '@/components/Loader';
 
 const CoursesPage = () => {
   const router = useRouter();
   const [courses, setCourses] = useState([]);
-  const [joinCodeVisible, setJoinCodeVisible] = useState(null);
-  const [inputJoinCode, setInputJoinCode] = useState('');
+  const [loading, setLoading] = useState(true);
   const { user } = useUser();
   const [prof,isprof]=useState(0);
   const [userd,setuserd]=useState(null);
@@ -27,6 +27,7 @@ const CoursesPage = () => {
         const ge = "mycou";
         const response = await axios.post(`/api/course`, { ge, id: fg });
         setCourses(response?.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
@@ -53,7 +54,7 @@ const CoursesPage = () => {
     }
   };
   
-
+  if (loading) return <Loader />;
 
   return (
     <div className="p-8 bg-gradient-to-b from-gray-600 to-gray-50 min-h-screen">

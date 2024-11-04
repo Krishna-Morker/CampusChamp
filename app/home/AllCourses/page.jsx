@@ -4,10 +4,12 @@ import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { toast } from 'react-toastify';
 import { FaGalacticSenate } from 'react-icons/fa';
+import Loader from '@/components/Loader';
 
 const CoursesPage = () => {
   const [courses, setCourses] = useState([]);
   const [joinCodeVisible, setJoinCodeVisible] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [inputJoinCode, setInputJoinCode] = useState('');
   const { user } = useUser();
   const [userid,setuserid]=useState(null);
@@ -20,6 +22,7 @@ const CoursesPage = () => {
       const ge = "get";
       const response = await axios.post('/api/course', { ge, id: fg });
       setCourses(response?.data);
+      setLoading(false);
     } catch (error) {
       console.log('Error fetching courses:', error);
     }
@@ -56,7 +59,7 @@ const CoursesPage = () => {
     console.log('Error fetching courses:', error);
   }
   };
-
+  if (loading) return <Loader />;
   return (
     <div className="p-8 bg-gradient-to-b from-gray-600 to-gray-50 min-h-screen">
       <h1 className="text-5xl font-bold text-center mb-8 text-white-800">

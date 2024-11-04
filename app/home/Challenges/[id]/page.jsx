@@ -3,11 +3,13 @@ import axios from 'axios';
 import { use, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useSearchParams } from 'next/navigation'
+import Loader from '@/components/Loader';
 
 function Page({ params }) {
   const { id } = use(params);
   const [assignmentId, setAssignmentId] = useState(null);
   const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const type= searchParams.get('type')
 
@@ -22,8 +24,9 @@ function Page({ params }) {
         type,
         ge,
       });
-      console.log(response.data, "user");
+    
       setStudents(response.data); // Assuming response.data is an array of students
+      setLoading(false);
     } catch (error) {
       console.log("Error fetching student data:", error);
     }
@@ -101,6 +104,9 @@ function Page({ params }) {
   const onTimeStudents = students.filter(student => 
     student.submissionDate && new Date(student.submissionDate) <= new Date(student.duedate)
   );
+  if(loading){
+    return <Loader/>
+  }
 
   return (
     <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">

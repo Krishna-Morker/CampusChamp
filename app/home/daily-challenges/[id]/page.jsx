@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useUser } from '@clerk/nextjs';
 import { useEdgeStore } from '@/lib/edgestore';
 import { useRouter } from 'next/navigation';
+import Loader from '@/components/Loader';
 import { useSearchParams } from 'next/navigation'
 
 const AssignmentsPage = ({ params }) => {
@@ -31,12 +32,13 @@ const AssignmentsPage = ({ params }) => {
       const ge = "add";
       const response = await axios.post(`/api/challenges`, { id: courseId, ge,type });
       setAssignments(response.data);
-      console.log(response.data);
+     
       const p = user.id;
       const idResponse = await axios.post('/api/user', { id: p });
       const fg = idResponse.data._id;
       setstid(idResponse.data);
-      console.log(idResponse.data,"student");
+      setLoad(false);
+    
     } catch (error) {
       console.log("Error fetching assignments:", error);
     }
@@ -90,12 +92,12 @@ const AssignmentsPage = ({ params }) => {
       const ge = "addstu";
       await axios.post(`/api/challenges`, { ge, newFile });
 
-      toast.success("Assignment submitted successfully!");
+      toast.success("Challenge submitted successfully!");
       // Fetch assignments again to reflect the latest state
       fetchAssignments();
     } catch (error) {
-      console.log("Error uploading file:", error);
-      toast.error("Failed to upload assignment.");
+    
+      toast.error("Failed to upload Challenge.");
     } finally {
       setLoading((prev) => ({ ...prev, [assignmentId]: false }));
       setProgress((prev) => ({ ...prev, [assignmentId]: 0 }));
@@ -108,12 +110,12 @@ const AssignmentsPage = ({ params }) => {
     try {
       
       await axios.post(`/api/challenges`, { ge, assID, stid:stid._id,type });
-      toast.info("Assignment removed.");
+      toast.info("Challenge removed.");
       // Fetch assignments again to reflect the latest state
       fetchAssignments();
     } catch (error) {
       console.log("Error removing file:", error);
-      toast.error("Failed to remove assignment.");
+      toast.error("Failed to remove Challenge.");
     }
   };
   const remass = async (ASSID) => {
@@ -122,14 +124,15 @@ const AssignmentsPage = ({ params }) => {
       const ge = "remass";
       
       await axios.post(`/api/challenges`, { ge, ASSID,type});
-      toast.info("Assignment removed.");
+      toast.info("Challenge removed.");
       // Fetch assignments again to reflect the latest state
       fetchAssignments();
     } catch (error) {
       console.log("Error removing file:", error);
-      toast.error("Failed to remove assignment.");
+      toast.error("Failed to remove Challenge.");
     }
   };
+  if((load))return <Loader />;
   return (
     <div className="bg-gradient-to-b from-gray-600 to-gray-50 py-8 px-4 min-h-screen">
       <div className="max-w-3xl mx-auto">
