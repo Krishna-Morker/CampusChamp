@@ -37,7 +37,7 @@ function AttendancePage({ params }) {
   useEffect(() => {
     if (id) setCourseId(id);
   }, [id]);
-
+  
   // Check attendance status when courseId and date change
   useEffect(() => {
     const checkAttendanceStatus = async () => {
@@ -82,7 +82,12 @@ function AttendancePage({ params }) {
   const submitAttendance = async () => {
     const ge = "submitattendance";
     try {
-      const response = await axios.post('/api/attendance', { attendanceStatus, courseId, date, ge });
+      const points = prompt(`Enter points to assign to all Present Students`);
+      if (!points || isNaN(points)) {
+        toast.error("Please enter a valid number.");
+        return;
+      }
+      const response = await axios.post('/api/attendance', { attendanceStatus, courseId, date, ge,points });
       if (response.status === 200) {
         toast.success("Attendance submitted successfully");
         setSubmitted(true); // Set submitted to true
@@ -127,7 +132,7 @@ function AttendancePage({ params }) {
                   className={`flex items-center p-4 border rounded-md 
                     ${submitted ? 'opacity-50 cursor-not-allowed' : ''} 
                     ${attendanceStatus[student._id] === 'Present' ? 'border-green-500 bg-green-100' : 
-                      attendanceStatus[student._id] === 'Absent' ? 'border-red-500 bg-red-100' : 'border-gray-300'}`}
+                      (attendanceStatus[student._id] === 'Absent' || attendanceStatus[student._id] !== 'Present' && submitted ) ? 'border-red-500 bg-red-100' : 'border-gray-300'}`}
                 >
                   <img
                     src={student.avatar} // Using a placeholder avatar
