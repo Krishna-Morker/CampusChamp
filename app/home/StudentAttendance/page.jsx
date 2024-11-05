@@ -40,9 +40,9 @@ export default function StudentAttendancePage() {
   return (
     <div className="p-8 min-h-screen"
     style={{ backgroundColor: '#242527' }}>
-      <h1 className="text-5xl font-bold text-center mb-8 text-white-800">My Courses</h1>
+      <h1 className="text-5xl font-bold text-center mb-8 text-white-800">Enrolled Courses</h1>
       {courses.length === 0 ? (
-        <h1 className='text-3xl font-bold text-center mb-9 text-white-800'>No Courses Available :)</h1>
+        <h1 className='text-3xl font-bold text-center mb-9 text-white-800'>No Courses Enrolled :)</h1>
       ) : (
         <div className="grid gap-9 sm:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
