@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 // import { set } from 'mongoose';
-// import Loader from '@/components/Loader';
+ import Loader from '@/components/Loader';
 
 export default function StudentAttendancePage() {
     const router = useRouter();
@@ -36,7 +36,7 @@ export default function StudentAttendancePage() {
         };  
         fetchCourses();
     }, [user]);
-
+    if(loading)return <Loader/>
   return (
     <div className="p-8 min-h-screen"
     style={{ backgroundColor: '#242527' }}>

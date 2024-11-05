@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-
+import Loader from '@/components/Loader';
 import styles from './ViewAttendancePage.module.css';
 
 export default function ViewAttendancePage({ params }) {
@@ -20,6 +20,7 @@ export default function ViewAttendancePage({ params }) {
     const [presentDates, setPresentDates] = useState([])
     const [absentDates, setAbsentDates] = useState([])
     const [events, setEvents] = useState([])
+    const [loading, setLoading] = useState(true);
 
     // Fetch Attendance from the backend
     // Update dependencies for useEffect to ensure userId and courseId are set before fetching attendance
@@ -64,7 +65,7 @@ export default function ViewAttendancePage({ params }) {
                 ];
 
                 if (allevents) setEvents(allevents);
-
+                setLoading(false);
                 console.log(allevents);
             } catch (error) {
                 console.error('Error fetching attendance:', error);
@@ -87,11 +88,12 @@ export default function ViewAttendancePage({ params }) {
         return `${year}-${month}-${day}`;
     }
 
-
+    if(loading) return <Loader />
     return (
         <>
+       
             <div className="calendarContainer">
-                <h1 className="calendarTitle text-red-800 text-center font-semibold largeText">Course Attendance</h1>
+                <h1 className="calendarTitle text-4xl text-red-800 text-center font-extrabold largeText">Course Attendance</h1>
                 <div className='p-8 '>
 
                 <FullCalendar
@@ -103,6 +105,12 @@ export default function ViewAttendancePage({ params }) {
                         center: 'title',
                         right: 'dayGridMonth,dayGridWeek,dayGridDay'
                     }}
+                      dayHeaderContent={(date) => {
+                    const dayName = date.date.toLocaleString('en-US', { weekday: 'long' }); // Get the full day name
+                    return (
+                        <span className="text-black font-bold">{dayName}</span>
+                    );
+                }}
                     eventContent={(eventInfo) => (
                         <div className="custom-event" style={{ padding: '4px' }}>
                             <span>{eventInfo.event.title}</span>
