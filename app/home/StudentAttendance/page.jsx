@@ -3,83 +3,82 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
-// import { set } from 'mongoose';
- import Loader from '@/components/Loader';
+import Loader from '@/components/Loader';
 
 export default function StudentAttendancePage() {
     const router = useRouter();
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const { user } = useUser();
-    const [prof,isprof]=useState(0);
-    const [userd,setuserd]=useState(null);
+    const [prof, isProf] = useState(0);
+    const [userData, setUserData] = useState(null);
 
     // Fetch courses from the backend
     useEffect(() => {
         const fetchCourses = async () => {
             try {
                 let p = user.id;
-                let id = await axios.post('/api/user', { id: p });
-                const fg = id.data._id;
+                let idResponse = await axios.post('/api/user', { id: p });
+                const userId = idResponse.data._id;
+
+                setUserData(idResponse.data);
+                isProf(idResponse.data.prof);
+                const ge = "myattendance";
                 
-                setuserd(id.data)
-                isprof(id.data.prof)
-                const ge = "mycou";
-                const response = await axios.post(`/api/course`, { ge, id: fg });
-                setCourses(response?.data);
+                // Fetch courses with attendance data
+                const response = await axios.post(`/api/attendance`, { ge, id: userId });
+                
+                // Assume response.data contains the courses and attendance percentages
+                setCourses(response.data); // Adjust based on your backend response
                 setLoading(false);
 
-                // console.log(response,courses)
             } catch (error) {
                 console.error('Error fetching courses:', error);
             }
-        };  
+        };
         fetchCourses();
     }, [user]);
-    if(loading)return <Loader/>
-  return (
-    <div className="p-8 min-h-screen"
-    style={{ backgroundColor: '#242527' }}>
-      <h1 className="text-5xl font-bold text-center mb-8 text-white-800">Enrolled Courses</h1>
-      {courses.length === 0 ? (
-        <h1 className='text-3xl font-bold text-center mb-9 text-white-800'>No Courses Enrolled :)</h1>
-      ) : (
-        <div className="grid gap-9 sm:grid-cols-2 lg:grid-cols-3">
-          {courses.map((course) => (
-              <div
-              key={course._id}
-              className="p-8 rounded-xl shadow-2xl transition-transform transform hover:scale-105 hover:shadow-2xl"
-              style={{  backgroundColor: '#31363f'}}>
-             {/* {(prof===1) ? (<button
-                onClick={() => handleDeleteCourse(course._id)}
-                className="absolute top-2 right-2 bg-red-500 text-white-950 py-1 px-2 rounded-md hover:bg-red-600 transition duration-150"
-              >
-                Delete
-              </button>) : (<button
-                onClick={() => handleaveCourse(course._id)}
-                className="absolute top-2 right-2 bg-red-500 text-white-950 py-1 px-2 rounded-md hover:bg-red-600 transition duration-150"
-              >
-                Leave
-              </button>)} */}
-              <h2 className="text-3xl font-extrabold underline text-center text-white-950 mb-7">{course.CourseName}</h2>
-              <div className="text-center">
-        <p className="text-lg text-white-800 mb-2">
-          <span className="font-semibold text-white-500">Professor: {course.ProfessorName}</span>
-        </p>
-        <p className="text-1xl font-normal text-white-900 leading-relaxed italic p-4">
-          {course.Description || "No description provided for this course."}
-        </p>
-      </div>
-              <button
-                onClick={() => router.push(`/home/StudentAttendance/${course._id}`)}
-                className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-150"
-              >
-                View Attendance
-              </button>
-            </div>
-          ))}
+
+    if (loading) return <Loader />;
+    
+    return (
+        <div className="p-8 min-h-screen" style={{ backgroundColor: '#242527' }}>
+            <h1 className="text-5xl font-bold text-center mb-8 text-white">Enrolled Courses</h1>
+            {courses.length === 0 ? (
+                <h1 className='text-3xl font-bold text-center mb-9 text-white'>No Courses Enrolled :)</h1>
+            ) : (
+                <div className="grid gap-9 sm:grid-cols-2 lg:grid-cols-3">
+                    {courses.map((course) => (
+                        <div
+                            key={course.course._id}
+                            className="relative p-8 rounded-xl shadow-2xl transition-transform transform hover:scale-105 hover:shadow-2xl"
+                            style={{ backgroundColor: '#31363f' }}
+                        >
+                            {/* Display Attendance Percentage in the top right corner */}
+                            <div className="absolute top-3 right-4 bg-red-500 text-white px-2 rounded-md shadow-md">
+                                {course.attendancePercentage}%
+                            </div>
+                            <h2 className="text-3xl font-extrabold underline text-center text-white mb-7">
+                                {course.course.CourseName}
+                            </h2>
+                            <div className="text-center">
+                                <p className="text-lg text-white mb-2">
+                                    <span className="font-semibold text-white">Professor: {course.course.ProfessorName}</span>
+                                </p>
+                                <p className="text-1xl font-normal text-white leading-relaxed italic p-4">
+                                    {course.course.Description || "No description provided for this course."}
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => router.push(`/home/StudentAttendance/${course.course._id}`)}
+                                className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-150"
+                            >
+                                View Attendance
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  )
+    );
 }

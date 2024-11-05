@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {saveAttendance,saveStatus,getAttendance} from "@/lib/actions/attendance"
+import {saveAttendance,saveStatus,getAttendance,Myattendance} from "@/lib/actions/attendance"
 
 export async function POST(request) {
     try {
@@ -16,6 +16,9 @@ export async function POST(request) {
         }
         else if(ge==='viewattendance'){
           const res=await getAttendance(body);
+          return NextResponse.json(res);
+        }else if(ge==='myattendance'){
+          const res=await Myattendance(body);
           return NextResponse.json(res);
         }
       } catch (error) {
