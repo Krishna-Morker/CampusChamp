@@ -69,6 +69,12 @@ export default function Layout({ children }) {
             </Link>
           )}
 
+          {!isProf && (
+            <Link href="/home/StudentAttendance"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
+              Attendance
+            </Link>
+          )}
+
           {/* Menu Trigger Button */}
           <button
             onClick={(e) => handleMenuOpen(e, 'courses')}

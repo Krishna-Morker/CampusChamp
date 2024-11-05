@@ -53,7 +53,7 @@ const Leaderboard = () => {
                 <td className="py-3 px-4 border-b border-gray-600 flex justify-center">
                   <img src={student.avatar} alt={student.username} className="w-10 h-10 rounded-full" />
                 </td>
-                <td className="py-3 px-4 border-b border-gray-600">{student.username}</td>
+                <td className="py-3 px-4 border-b border-gray-600">{student.username || (student.firstName+" "+student.lastName)}</td>
                 <td className="py-3 px-4 border-b border-gray-600 text-center">{student.points}</td>
                 <td className="py-3 px-4 border-b border-gray-600">{student.email}</td>
               </tr>
