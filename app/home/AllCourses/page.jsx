@@ -16,7 +16,7 @@ const CoursesPage = () => {
       let p = user.id;
       let id = await axios.post('/api/user', { id: p });
       const fg = id.data._id;
-      setuserid(fg)
+      setuserid(id)
       const ge = "get";
       const response = await axios.post('/api/course', { ge, id: fg });
       setCourses(response?.data);
