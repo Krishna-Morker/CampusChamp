@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Notification from '@/components/Notification';
+import axios from 'axios';
 
 export default function Layout({ children }) {
   const [anchorElCourses, setAnchorElCourses] = useState(null);
@@ -14,7 +16,14 @@ export default function Layout({ children }) {
   const { isLoaded, isSignedIn, user } = useUser();
   const [isProf, setIsProf] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const sendNotification = async () => {
+    try {
+      await axios.post('/api/notify', { message: 'Hello from Pusher!' });
+      console.log('Notification sent');
+    } catch (error) {
+      console.error('Error sending notification', error);
+    }
+  };
   const handleMenuOpen = (event, menu) => {
     if (menu === 'courses') {
       setAnchorElCourses(event.currentTarget);
@@ -56,6 +65,7 @@ export default function Layout({ children }) {
         <h1 className="text-3xl font-extrabold">
           Campus Champ
         </h1>
+        <Notification/>
         <div className="flex items-center space-x-6">
           <Link href="/home"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
             Home
@@ -74,7 +84,7 @@ export default function Layout({ children }) {
               Attendance
             </Link>
           )}
-
+           <button onClick={sendNotification}>Send Notification</button>
           {/* Menu Trigger Button */}
           <button
             onClick={(e) => handleMenuOpen(e, 'courses')}

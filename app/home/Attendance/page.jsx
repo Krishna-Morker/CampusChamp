@@ -29,12 +29,13 @@ const CoursesPage = () => {
         const ge = "mycou";
         const response = await axios.post(`/api/course`, { ge, id: fg });
         setCourses(response?.data);
+        console.log(response?.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
     };
-   if(user.id) fetchCourses();
+   if(user?.id) fetchCourses();
   }, [user]);
 
   // Handle course deletion

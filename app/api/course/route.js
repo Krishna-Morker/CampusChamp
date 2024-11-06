@@ -35,7 +35,8 @@ export async function POST(request) {
           const res=await Getcourse(body.id);
           return NextResponse.json(res);
         }else if(ge==="mycou"){
-          const res=await Mycourse(body.id);
+          const {id}=body
+          const res=await Mycourse(id);
           return NextResponse.json(res);
         }else if(ge==="join"){
           const res=await Addstudent(body);
