@@ -7,7 +7,6 @@ export async function POST(req){
 
         const body=await req.json();
         const {ge}=body;
-        console.log(body,"body")
         if(ge==="getnotification"){
         const noti=await getNotifi(body);
         return NextResponse.json(noti);

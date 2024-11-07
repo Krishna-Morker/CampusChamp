@@ -13,6 +13,7 @@ import axios from 'axios';
 export default function Layout({ children }) {
   const [anchorElCourses, setAnchorElCourses] = useState(null);
   const [anchorElChallenges, setAnchorElChallenges] = useState(null);
+  const [anchorElRooms, setAnchorElRooms] = useState(null);
   const { isLoaded, isSignedIn, user } = useUser();
   const [isProf, setIsProf] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,17 +23,21 @@ export default function Layout({ children }) {
       setAnchorElCourses(event.currentTarget);
     } else if (menu === 'Challenges') {
       setAnchorElChallenges(event.currentTarget);
+    }else if(menu === 'Room'){
+      setAnchorElRooms(event.currentTarget);
     }
   };
 
   const handleMenuClose = () => {
     setAnchorElCourses(null);
+    setAnchorElRooms(null);
     setAnchorElChallenges(null);
   };
   
   const handle = () => {
     setAnchorElCourses(null);
     setAnchorElChallenges(null);
+    setAnchorElRooms(null);
     setIsModalOpen(true);
   };
 
@@ -102,7 +107,30 @@ export default function Layout({ children }) {
               </MenuItem>
             )}
           </Menu>
-
+          <button
+            onClick={(e) => handleMenuOpen(e, 'Room')}
+            className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300"
+          >
+            Room
+          </button>
+          <Menu
+            anchorEl={anchorElRooms}
+            open={Boolean(anchorElRooms)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={handleMenuClose}>
+              <Link href={{ pathname: '/home/daily-challenges', query: { type: 'daily' } }}>Daily Challenges</Link>
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <Link href={{ pathname: '/home/daily-challenges', query: { type: 'weekly' } }}>Weekly Challenges</Link>
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+            <Link href="/home/Room/Request">Request</Link>
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <Link href="/home/Room/Addroom">Create Room</Link>
+            </MenuItem>
+          </Menu>
           {/* Challenges Menu Trigger */}
           <button
             onClick={(e) => handleMenuOpen(e, 'Challenges')}
@@ -132,6 +160,7 @@ export default function Layout({ children }) {
           {isModalOpen && (
             <Page isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} gh={showToast} />
           )}
+      
              <Notification/>
           <SignedIn>
             <UserButton />
