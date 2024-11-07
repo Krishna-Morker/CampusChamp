@@ -17,6 +17,7 @@ const Notifications = () => {
   const { user } = useUser();
   const [professorCourses, setProfessorCourses] = useState([]);
   const [use, setUse] = useState([]);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false); // State to control popover visibility
 
   // Fetch courses and notifications from the backend
   const fetchCoursesAndNotifications = async () => {
@@ -25,7 +26,6 @@ const Notifications = () => {
       const userData = response.data;
       setProfessorCourses(userData.Courses || []);
       setUse(userData);
-      console.log(userData)
       const notifica = await axios.post('/api/notification', { id: userData._id, ge: "getnotification" });
       setNotifications(notifica.data);
     } catch (error) {
@@ -43,15 +43,21 @@ const Notifications = () => {
     });
 
     const subscribedChannels = [];
-    if(use?.prof===1){
+   
     professorCourses.forEach(courseId => {
       const channel = pusher.subscribe(`course-${courseId}-notifications`);
       subscribedChannels.push(channel);
-
-      channel.bind('student-joined', (data) => {
+      if (use?.prof === 1) {
+        channel.bind('student-joined', (data) => {
           toast.success(data.message);
           fetchCoursesAndNotifications();
-      });
+        });
+      } else {
+        channel.bind('assignment-created', (data) => {
+          toast.success(data.message);
+          fetchCoursesAndNotifications();
+        });
+      }
     });
 
     return () => {
@@ -61,8 +67,10 @@ const Notifications = () => {
       });
       pusher.disconnect();
     };
-  }
   }, [professorCourses, user]);
+
+  // Count unread notifications
+  const unreadCount = notifications.filter(notification => !notification.readStatus).length;
 
   // Function to mark all notifications as read
   const markAllAsRead = async () => {
@@ -80,8 +88,17 @@ const Notifications = () => {
     }
   };
 
+  // Handle popover open/close event
+  const handlePopoverChange = (isOpen) => {
+    setIsPopoverOpen(isOpen);
+    if (!isOpen) {
+      // Automatically mark all as read when the popover is closed
+      markAllAsRead();
+    }
+  };
+
   return (
-    <Popover onOpenChange={(isOpen) => !isOpen && markAllAsRead()}>
+    <Popover onOpenChange={handlePopoverChange}>
       <PopoverTrigger className="relative flex items-center justify-center rounded-lg">
         <Image 
           src="/bell.svg"
@@ -90,30 +107,49 @@ const Notifications = () => {
           height={24}
           className="hover:scale-110 transition-transform duration-150"
         />
+        {unreadCount > 0 && (
+          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1">
+            {unreadCount}
+          </span>
+        )}
       </PopoverTrigger>
-      <PopoverContent align="end" className="bg-white border border-gray-200 shadow-lg rounded-lg max-w-xs">
-        <div className="p-4">
-          <h3 className="text-lg font-semibold mb-3">Notifications</h3>
-          <ul className="space-y-2">
-            {notifications.length === 0 && (
-              <p className="text-center text-gray-500">No new notifications</p>
-            )}
-            {notifications.map((notification, index) => (
-              <li 
-                key={index} 
-                className={`p-3 rounded-lg transition-colors duration-200 ${
-                  notification.readStatus ? 'bg-gray-100 text-gray-500' : 'bg-blue-50 text-blue-700'
-                }`}
-              >
-                <p className="text-sm">{notification.message}</p>
-                <p className="text-xs text-gray-400 mt-1">
-                  {notification.createdAt ? new Date(notification.createdAt).toLocaleString() : 'No timestamp'}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </PopoverContent>
+
+      {isPopoverOpen && (
+        <PopoverContent align="end" className="bg-white border border-gray-200 shadow-lg rounded-lg max-w-xs">
+          <div className="relative p-4">
+            {/* Close Button for the Popover */}
+            <button
+              onClick={() => setIsPopoverOpen(false)}  // Close on click
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+            >
+              ✕
+            </button>
+
+            <h3 className="text-lg text-gray-800 font-semibold mb-3">Notifications</h3>
+            <ul className="space-y-2 text-gray-800 max-h-[50vh] overflow-y-auto">
+              {notifications.length === 0 && (
+                <p className="text-center text-gray-800">No new notifications</p>
+              )}
+              {notifications.map((notification) => (
+                <div key={notification._id} className="max-h-[50vh] overflow-y-auto mr-4v mb-2">
+                  <li
+                    className={`p-3 rounded-lg transition-colors duration-200 ${
+                      notification.readStatus ? 'bg-gray-100 text-gray-500' : 'bg-blue-200 text-blue-700'
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <p className="text-sm text-gray-700">{notification.message}</p>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {notification.createdAt ? new Date(notification.createdAt).toLocaleString() : 'No timestamp'}
+                    </p>
+                  </li>
+                </div>
+              ))}
+            </ul>
+          </div>
+        </PopoverContent>
+      )}
     </Popover>
   );
 }

@@ -82,6 +82,7 @@ function Page({ params }) {
       const ge="add"
     try {
       const response = await axios.post("/api/points", {
+        assignmentId,
         studentId,
         points: parseInt(points, 10),
         ge,

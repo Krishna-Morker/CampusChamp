@@ -89,8 +89,10 @@ function Page({ params }) {
     try {
       const response = await axios.post("/api/points", {
         studentId,
+        assignmentId,
         points: parseInt(points, 10),
         ge,
+        type,
       });
       toast.success(response.data);
       // Refresh student data to reflect new points
