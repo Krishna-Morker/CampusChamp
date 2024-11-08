@@ -122,7 +122,7 @@ export default function Layout({ children }) {
               <Link href={{ pathname: '/home/daily-challenges', query: { type: 'daily' } }}>Daily Challenges</Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
-              <Link href={{ pathname: '/home/daily-challenges', query: { type: 'weekly' } }}>Weekly Challenges</Link>
+            <Link href="/home/Room">Join Room</Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
             <Link href="/home/Room/Request">Request</Link>

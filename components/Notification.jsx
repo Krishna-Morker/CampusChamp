@@ -19,6 +19,7 @@ const Notifications = () => {
   const [use, setUse] = useState([]);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false); // State to control popover visibility
 
+
   // Fetch courses and notifications from the backend
   const fetchCoursesAndNotifications = async () => {
     try {
@@ -43,7 +44,11 @@ const Notifications = () => {
     });
 
     const subscribedChannels = [];
-   
+    const channel1 = pusher.subscribe(`room-${use._id}`);
+    channel1.bind('room-created', (data) => {
+      toast.success(data.message);
+      fetchCoursesAndNotifications();
+    });
     professorCourses.forEach(courseId => {
       const channel = pusher.subscribe(`course-${courseId}-notifications`);
       subscribedChannels.push(channel);

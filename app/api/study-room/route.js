@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {createroom,Pendingrequest,Acceptrequest,Deleterequest} from "@/lib/actions/study-room";
+import {createroom,Pendingrequest,Acceptrequest,Deleterequest,Userroom,Getroom,Leftroom} from "@/lib/actions/study-room";
 
 
 export async function POST(req) {
@@ -20,6 +20,15 @@ export async function POST(req) {
      }else if(ge==="reject"){
         const newRoom = await Deleterequest(body);
         return NextResponse.json("Sucessfully rejected request");  
+     }else if(ge==="accepted"){
+      const res=await Userroom(body)
+      return NextResponse.json(res);
+     }else if(ge==="leftroom"){
+      const res=await Leftroom(body)
+      return NextResponse.json(res);
+     }else if(ge==="getroom"){
+      const res=await Getroom(body)
+      return NextResponse.json(res);
      }
     } catch (error) {
       return NextResponse.json({ error: "Error creating room", details: error });
