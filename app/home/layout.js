@@ -133,7 +133,7 @@ export default function Layout({ children }) {
             onClose={handleMenuClose}
           >
             <MenuItem onClick={handleMenuClose}>
-              <Link href={{ pathname: '/home/daily-challenges', query: { type: 'daily' } }}>Daily Challenges</Link>
+            <Link href="/home/Room/Solo">Solo Room</Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>
             <Link href="/home/Room">Join Room</Link>
