@@ -162,9 +162,9 @@ const SeeActivities = () => {
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-lg mx-auto">
           <h2 className="text-xl font-semibold mb-4">Activity Details</h2>
           {activity ? (
-            <div>
-              {activity.description.map((desc, index) => (
-                <div key={desc._id} className="mb-4 p-4 bg-gray-700 rounded-lg">
+            <div key={activity._id}>
+              {activity.description.map((desc) => (
+                <div key={desc._id||Math.random()} className="mb-4 p-4 bg-gray-700 rounded-lg">
                   <h4 className="text-lg font-semibold">{desc.title}</h4>
                   <p className="text-gray-300">{desc.details}</p>
                   <button
