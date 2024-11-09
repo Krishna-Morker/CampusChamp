@@ -12,6 +12,7 @@ const SoloStudyPage = () => {
   const [isTimerPopupOpen, setIsTimerPopupOpen] = useState(false);
   const [isGoalsPopupOpen, setIsGoalsPopupOpen] = useState(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
+  const [timerError, setTimerError] = useState(""); // For error messages
 
   const toggleTimerPopup = () => {
     setIsTimerPopupOpen(!isTimerPopupOpen);
@@ -70,11 +71,23 @@ const SoloStudyPage = () => {
   const handleRemoveTask = (index) => {
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks)); // Update localStorage
   };
 
-  // Calculate total time in seconds when starting the timer
+  // Validate time inputs and start the timer
   const handleStartTimer = () => {
-    const totalSeconds = (parseInt(hours) || 0) * 3600 + (parseInt(minutes) || 0) * 60 + (parseInt(seconds) || 0);
+    const hoursInt = parseInt(hours) || 0;
+    const minutesInt = parseInt(minutes) || 0;
+    const secondsInt = parseInt(seconds) || 0;
+
+    // Validation
+    if (hoursInt < 0 || minutesInt < 0 || minutesInt > 59 || secondsInt < 0 || secondsInt > 59) {
+      setTimerError("Please enter valid hours, minutes (0-59), and seconds (0-59).");
+      return;
+    }
+
+    setTimerError(""); // Clear error if valid
+    const totalSeconds = hoursInt * 3600 + minutesInt * 60 + secondsInt;
     setTimer(totalSeconds);
     setTimerActive(true);
     setIsTimerPopupOpen(false);
@@ -93,9 +106,7 @@ const SoloStudyPage = () => {
     <div className="relative min-h-screen">
       {/* YouTube Video as Background */}
       <div
-        className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${
-          isVideoReady ? "opacity-100" : "opacity-0"
-        }`}
+        className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${isVideoReady ? "opacity-100" : "opacity-0"}`}
       >
         <iframe
           src="https://www.youtube.com/embed/cLOP0Kr36ZA?start=5&loop=1&playlist=cLOP0Kr36ZA&showinfo=0&controls=0&disablekb=0&fs=0&rel=0&iv_load_policy=3&autoplay=1&mute=1&modestbranding=1&playsinline=1&enablejsapi=1"
@@ -168,6 +179,8 @@ const SoloStudyPage = () => {
                   placeholder="Seconds"
                 />
               </div>
+              {/* Error Message */}
+              {timerError && <p className="text-red-500 text-sm mb-4">{timerError}</p>}
               <div className="flex justify-between">
                 <button
                   onClick={handleStartTimer}
@@ -204,16 +217,13 @@ const SoloStudyPage = () => {
               >
                 Add Task
               </button>
-              <ul className="task-list">
+              <ul className="space-y-2">
                 {tasks.map((task, index) => (
-                  <li
-                    key={index}
-                    className="text-black bg-gray-200 p-3 mb-2 rounded flex justify-between"
-                  >
+                  <li key={index}   className="text-black bg-gray-200 p-3 mb-2 rounded flex justify-between">
                     {task}
                     <button
                       onClick={() => handleRemoveTask(index)}
-                      className="bg-red-600 px-2 rounded text-white"
+                      className="bg-red-500 text-white p-1 rounded-lg"
                     >
                       Remove
                     </button>
@@ -222,7 +232,7 @@ const SoloStudyPage = () => {
               </ul>
               <button
                 onClick={toggleGoalsPopup}
-                className="bg-red-500 p-2 rounded text-white w-full"
+                className="bg-red-500 p-2 rounded text-white mt-4"
               >
                 Close
               </button>
