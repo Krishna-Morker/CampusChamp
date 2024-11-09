@@ -4,8 +4,11 @@ import axios from "axios";
 import Pusher from 'pusher-js';
 import {use, useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
+import Page from '@/app/home/Room/Addtask/Page';
+import { useRouter } from "next/navigation";
 
 const RoomPage = ({ params }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useUser();
   const [roomData, setRoomData] = useState(null);
   const [participants, setParticipants] = useState([]);
@@ -16,7 +19,22 @@ const RoomPage = ({ params }) => {
   const [inputTime, setInputTime] = useState(""); // Separate state for input field
   const [channel, setChannel] = useState(null);
   const { roomId } = use(params);
+  const router= useRouter()
   const chatContainerRef = useRef(null);
+
+  const fetchRoomData = async () => {
+    try {
+      const roomRes = await axios.post(`/api/study-room`, { ge: "getroom", roomId });
+      setRoomData(roomRes.data);
+      setParticipants(roomRes.data.participants);
+      setTasks(roomRes.data.tasks);
+
+      const messagesRes = await axios.post(`/api/message`, { roomId, ge: "getmessage" });
+      setMessages(messagesRes.data);
+    } catch (error) {
+      console.error("Error fetching room data:", error);
+    }
+  };
 
   useEffect(() => {
     if (!roomId || !user) return;
@@ -34,6 +52,11 @@ const RoomPage = ({ params }) => {
 
     newChannel.bind('start-timer', (data) => {
       setTimer(data.duration); // Sync timer with other users
+    });
+    newChannel.bind('task-created', (data) => {
+      
+     toast.success(data.message); // Sync timer with other users
+     fetchRoomData()
     });
 
 
@@ -60,23 +83,21 @@ const RoomPage = ({ params }) => {
     fetchTimer();
   }, [roomId, user]);
 
-  useEffect(() => {
-    const fetchRoomData = async () => {
-      try {
-        const roomRes = await axios.post(`/api/study-room`, { ge: "getroom", roomId });
-        setRoomData(roomRes.data);
-        setParticipants(roomRes.data.participants);
-        setTasks(roomRes.data.tasks);
 
-        const messagesRes = await axios.post(`/api/message`, { roomId, ge: "getmessage" });
-        setMessages(messagesRes.data);
-      } catch (error) {
-        console.error("Error fetching room data:", error);
-      }
-    };
+
+  useEffect(() => {
+   
 
     fetchRoomData();
   }, [roomId, user.id]);
+  const isOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const onClose = () => {
+    setIsModalOpen(false);
+    fetchRoomData();
+  };
 
   useEffect(() => {
     if (timer > 0) {
@@ -121,7 +142,20 @@ const RoomPage = ({ params }) => {
       }
     }
   };
-
+  const remtask = async (tasid) => {
+   
+    try {
+      const ge = "remtask";
+      
+      await axios.post(`/api/task`, { ge,roomId, tasid});
+      //toast.info("Assignment removed.");
+      // Fetch assignments again to reflect the latest state
+      fetchRoomData();
+    } catch (error) {
+      console.log("Error removing file:", error);
+      toast.error("Failed to remove assignment.");
+    }
+  };
   const handleLeaveRoom = async () => {
     try {
       if (channel) {
@@ -129,6 +163,7 @@ const RoomPage = ({ params }) => {
         channel.unsubscribe();
         toast.success("You have left the room.");
       }
+      router.push('/home/Room');
     } catch (error) {
       console.error("Error leaving room:", error);
       toast.error("Failed to leave the room.");
@@ -192,19 +227,45 @@ const RoomPage = ({ params }) => {
       </div>
 
       {/* Task/Assignment Section */}
-      <div className="mb-6">
+      <div className="flex items-center justify-between mb-9">
         <h2 className="text-2xl font-semibold mb-4">Tasks & Assignments</h2>
-        <ul>
+        <button
+            onClick={isOpen}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-150"
+          >
+            + Add New Task for all
+          </button>
+        
+        </div>
+        <div className="space-y-6 mb-6">
           {tasks?.map((task) => (
-            <li key={task.id} className="bg-gray-800 p-4 rounded-lg mb-4">
-              <h3 className="font-semibold">{task.title}</h3>
-              <p className="text-gray-300">{task.description}</p>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded mt-2">
-                Submit
-              </button>
-            </li>
+             <div
+             key={task._id}
+             className="p-5 rounded-xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl text-white"
+             style={{  backgroundColor: '#31363f'}}
+           >
+             <h2 className="text-2xl font-semibold text-white mb-2">{task.title}</h2>
+             <p className="text-white mb-4">{task.description}</p>
+            <div className="space-x-6">
+             {task.fileUrl && (
+               <a
+                 href={task.fileUrl}
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className="text-white-600 bg-gray-900 rounded-md py-2 px-4 underline hover:text-blue-100 mb-4 inline-block transition-colors duration-150"
+               >
+                 Download Assignment
+               </a>
+             )}
+               <button
+                     onClick={()=>remtask(task._id)} 
+                    className="bg-gradient-to-r from-red-500 to-pink-600 text-white mt-4 py-2 px-4 rounded-full shadow-md hover:scale-105 transition-transform duration-150"
+                  >
+                  Remove assignment
+                  </button>
+              </div>
+           </div>
           ))}
-        </ul>
       </div>
 
       {/* Timer Section */}
@@ -227,6 +288,7 @@ const RoomPage = ({ params }) => {
           <p className="text-center text-xl mt-2">{timer > 0 ? `${timer} seconds remaining` : "No active timer"}</p>
         </div>
       </div>
+      {isModalOpen && <Page isOpen={isOpen} onClose={onClose} roomId={roomId} />}
     </div>
   );
 };

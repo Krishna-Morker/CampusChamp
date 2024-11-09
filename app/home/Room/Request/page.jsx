@@ -2,11 +2,13 @@
 import { useState, useEffect } from "react";
 import { useUser } from '@clerk/nextjs';
 import axios from "axios";
+import Loader from '@/components/Loader';
 
 const Request = () => {
   const { user } = useUser();
   const [userd, setUserd] = useState(null);
   const [allRequest, setAllRequest] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -17,6 +19,7 @@ const Request = () => {
         setUserd(id.data);
         const response = await axios.post("/api/study-room", { fg, ge: "request" });
         setAllRequest(response.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching requests:", error);
       }
@@ -49,6 +52,7 @@ const Request = () => {
       console.error("Error rejecting request:", error);
     }
   };
+  if (loading) return <Loader />;
 
   return (
     <div className="p-6 bg-gray-900 min-h-screen flex flex-col items-center"

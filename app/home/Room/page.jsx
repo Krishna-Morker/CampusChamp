@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
+import Loader from '@/components/Loader';
 
 const AcceptedRoomsPage = () => {
   const [acceptedRooms, setAcceptedRooms] = useState([]);
   const [userd, setUserd] = useState(null);
   const { user } = useUser();
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAcceptedRooms = async () => {
@@ -21,11 +23,12 @@ const AcceptedRoomsPage = () => {
         // Fetch all rooms the user has joined
         const response = await axios.post("/api/study-room", { userId: fg, ge: "accepted" });
         setAcceptedRooms(response.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching accepted rooms:", error);
       }
     };
-
+    
     fetchAcceptedRooms();
   }, [user]);
 
@@ -42,21 +45,23 @@ const AcceptedRoomsPage = () => {
     }
   };
 
+  if (loading) return <Loader />;
+
   return (
-    <div className="p-6 bg-gray-100 rounded-lg max-w-lg mx-auto" style={{ backgroundColor: '#242527' }}>
-      <h1 className="text-2xl text-white-900 font-semibold mb-4">Your Accepted Rooms</h1>
+    <div className="m-5 p-6 bg-gray-100 rounded-lg max-w-[50%] mx-auto" style={{ backgroundColor: '#242527' }}>
+      <h1 className="text-2xl text-white font-semibold mb-4 text-center">Your Accepted Rooms</h1>
 
       {acceptedRooms.length === 0 ? (
-        <p className="text-white">No rooms joined yet</p>
+        <p className="text-white text-center">No rooms joined yet</p>
       ) : (
         acceptedRooms.map((room) => (
           <div key={room._id} className="text-white p-4 rounded-lg shadow mb-4" style={{ backgroundColor: '#31363f' }}>
-            <h2 className="text-xl font-semibold text-white-800">{room.roomName}</h2>
+            <h2 className="text-xl font-semibold">{room.roomName}</h2>
             <p className="text-white-600 mb-4">{room.roomDescription}</p>
 
             <div className="flex justify-between">
               <button
-                onClick={() => router.push(`/home/Room/${room._id}`)}
+                onClick={() => router.push(`/group/${room._id}`)}
                 className="bg-blue-600 text-white p-2 rounded-lg"
               >
                 Join Room

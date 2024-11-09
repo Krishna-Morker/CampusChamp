@@ -9,6 +9,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Notification from '@/components/Notification';
 import axios from 'axios';
+import CreateRoom from '@/app/home/Room/Addroom/page'
 
 export default function Layout({ children }) {
   const [anchorElCourses, setAnchorElCourses] = useState(null);
@@ -17,6 +18,7 @@ export default function Layout({ children }) {
   const { isLoaded, isSignedIn, user } = useUser();
   const [isProf, setIsProf] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenRoom,setisModalOpenRoom]= useState(false);
 
   const handleMenuOpen = (event, menu) => {
     if (menu === 'courses') {
@@ -40,12 +42,24 @@ export default function Layout({ children }) {
     setAnchorElRooms(null);
     setIsModalOpen(true);
   };
+  const handle1 = () => {
+    setAnchorElCourses(null);
+    setAnchorElChallenges(null);
+    setAnchorElRooms(null);
+    setisModalOpenRoom(true);
+  };
 
   const showToast = (message) => {
     toast.success(message, {
       position: "top-right",
     });
-    setIsModalOpen(true);
+    setIsModalOpen(false);
+  };
+  const showToast1 = (message) => {
+    toast.success(message, {
+      position: "top-right",
+    });
+    setisModalOpenRoom(false);
   };
 
   useEffect(() => {
@@ -127,8 +141,8 @@ export default function Layout({ children }) {
             <MenuItem onClick={handleMenuClose}>
             <Link href="/home/Room/Request">Request</Link>
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
-              <Link href="/home/Room/Addroom">Create Room</Link>
+            <MenuItem onClick={handle1}>
+             Create Room
             </MenuItem>
           </Menu>
           {/* Challenges Menu Trigger */}
@@ -160,7 +174,10 @@ export default function Layout({ children }) {
           {isModalOpen && (
             <Page isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} gh={showToast} />
           )}
-      
+          {isModalOpenRoom && (
+            <CreateRoom isOpen={isModalOpenRoom} onClose={() => setisModalOpenRoom(false)} gh={showToast1} />
+          )}
+        
              <Notification/>
           <SignedIn>
             <UserButton />
