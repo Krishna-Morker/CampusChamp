@@ -51,7 +51,7 @@ const Page = ({ isOpen, onClose, courseId, type}) => {
       onClose(); // Close the modal after successful submission
     } catch (error) {
       console.error('Error uploading Challenge:', error);
-      alert("Failed to upload Challenge");
+      toast.error("Failed to upload Challenge");
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 const SoloStudyPage = () => {
   const [tasks, setTasks] = useState([]);
@@ -39,7 +40,7 @@ const SoloStudyPage = () => {
       interval = setInterval(() => setTimer(timer - 1), 1000);
     } else if (timer === 0 && timerActive) {
       setTimerActive(false);
-      alert("Time's up!");
+      toast.success("Time's up!");
     }
     return () => clearInterval(interval);
   }, [timer, timerActive]);
@@ -82,7 +83,7 @@ const SoloStudyPage = () => {
 
     // Validation
     if (hoursInt < 0 || minutesInt < 0 || minutesInt > 59 || secondsInt < 0 || secondsInt > 59) {
-      setTimerError("Please enter valid hours, minutes (0-59), and seconds (0-59).");
+      toast.error("Please enter valid hours, minutes (0-59), and seconds (0-59).");
       return;
     }
 

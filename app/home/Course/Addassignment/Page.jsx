@@ -60,7 +60,7 @@ const Page = ({ isOpen, onClose ,courseId}) => {
       onClose(); // Close the modal after successful submission
     } catch (error) {
       console.error('Error uploading assignment:', error);
-      alert("Failed to upload assignment");
+      toast.error("Failed to upload assignment");
     } finally {
       setLoading(false);
     }

@@ -59,7 +59,7 @@ const Page = ({ isOpen, onClose ,roomId}) => {
       onClose(); // Close the modal after successful submission
     } catch (error) {
       console.error('Error uploading Task:', error);
-      alert("Failed to upload Task");
+      toast.error("Failed to upload Task");
     } finally {
       setLoading(false);
     }

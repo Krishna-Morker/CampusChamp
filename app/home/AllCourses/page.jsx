@@ -76,7 +76,7 @@ const CoursesPage = () => {
     className="p-8 rounded-xl shadow-2xl hover:scale-105 hover:shadow-2xl"
     style={{  backgroundColor: '#31363f'}}
   >
-      <h2 className="text-3xl font-extrabold underline text-center text-white-950 mb-7">
+      <h2 className="text-3xl font-extrabold text-center text-white-950 mb-7">
         {course.CourseName}
       </h2>
 

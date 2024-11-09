@@ -86,7 +86,7 @@ if(loading){
               >
                 Leave
               </button>)}
-              <h2 className="text-3xl font-extrabold underline text-center text-white-950 mb-7">
+              <h2 className="text-3xl font-extrabold text-center text-white-950 mb-7">
         {course.CourseName}
       </h2>
               <div className="text-center">

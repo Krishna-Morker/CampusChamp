@@ -58,7 +58,7 @@ export default function StudentAttendancePage() {
                             <div className="absolute top-3 right-4 bg-red-500 text-white px-2 rounded-md shadow-md">
                                 {course.attendancePercentage}%
                             </div>
-                            <h2 className="text-3xl font-extrabold underline text-center text-white mb-7">
+                            <h2 className="text-3xl font-extrabold text-center text-white mb-7">
                                 {course.course.CourseName}
                             </h2>
                             <div className="text-center">

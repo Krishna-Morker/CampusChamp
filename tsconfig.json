@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/layout.js", "app/(home)/layout.jsx", "app/(Front)/sign-in/[[...sign-in]]/page.tsx", "app/home/layout.js", "lib/mongodb/mongoose.js", "lib/models/usermodel.js", "app/api/webhooks/route.js", "middleware.js", "app/home/AddCourses/Page.jsx", "app/home/AllCourses/page.jsx", "app/home/MyCourses/page.jsx", "app/home/Course/[id]/page.jsx", "components/Notification.jsx", "app/home/Room/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/layout.js", "app/(home)/layout.jsx", "app/(Front)/sign-in/[[...sign-in]]/page.tsx", "app/home/layout.js", "lib/mongodb/mongoose.js", "lib/models/usermodel.js", "app/api/webhooks/route.js", "middleware.js", "app/home/AddCourses/Page.jsx", "app/home/AllCourses/page.jsx", "app/home/MyCourses/page.jsx", "app/home/Course/[id]/page.jsx", "components/Notification.jsx", "app/home/Room/page.jsx", "app/home/page.jsx"],
   "exclude": ["node_modules"]
 }

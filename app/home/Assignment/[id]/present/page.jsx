@@ -3,12 +3,21 @@ import axios from 'axios';
 import { use, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Loader from '@/components/Loader';
+import Modal from '@/components/modal'
 
 function Page({ params }) {
   const { id } = use(params);
   const [assignmentId, setAssignmentId] = useState(null);
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [InputValue, setInputValue] = useState("");
+  const [late,setlate]=useState(null);
+
+  const handleModalSubmit = () => {
+    console.log(InputValue);
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     if (id) setAssignmentId(id);
@@ -51,11 +60,10 @@ function Page({ params }) {
   };
 
   const handleAssignGlobalPoints = async (isOnTime) => {
-    const points = prompt(`Enter points to assign to all ${isOnTime ? "on-time" : "late"} submissions:`);
-    if (!points || isNaN(points)) {
-      toast.error("Please enter a valid number.");
-      return;
-    }
+    setIsModalOpen(true);
+    setlate(isOnTime)
+   // const points = prompt(`Enter points to assign to all ${isOnTime ? "on-time" : "late"} submissions:`);
+   const points=InputValue
     const ge="addextra"
     try {
       const response = await axios.post("/api/points", {
@@ -222,6 +230,17 @@ function Page({ params }) {
           )}
         </div>
       </div>
+      {isModalOpen && <Modal
+        isOpen={isModalOpen}
+        mes={`Enter points to assign to all ${late ? "on-time" : "late"} submissions:`}
+        onClose={() => setIsModalOpen(false)}
+        setInputValue={setInputValue}
+        InputValue={InputValue}
+        onSubmit={(e) => {
+          setInputValue(e.target.value);
+          handleModalSubmit();
+        }}
+      />}
     </div>
   );
 }
