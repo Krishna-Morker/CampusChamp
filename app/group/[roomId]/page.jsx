@@ -6,6 +6,7 @@ import {use, useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import Page from '@/app/home/Room/Addtask/Page';
 import { useRouter } from "next/navigation";
+import Loader from '@/components/Loader';
 
 const RoomPage = ({ params }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,6 +20,7 @@ const RoomPage = ({ params }) => {
   const [inputTime, setInputTime] = useState(""); // Separate state for input field
   const [channel, setChannel] = useState(null);
   const { roomId } = use(params);
+  const [loading, setLoading] = useState(true);
   const router= useRouter()
   const chatContainerRef = useRef(null);
 
@@ -31,6 +33,7 @@ const RoomPage = ({ params }) => {
 
       const messagesRes = await axios.post(`/api/message`, { roomId, ge: "getmessage" });
       setMessages(messagesRes.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching room data:", error);
     }
@@ -176,7 +179,7 @@ const RoomPage = ({ params }) => {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
-
+  if(loading) return <Loader/>
   return (
     <div className="p-8 bg-gray-900 text-white rounded-lg max-w-4xl mx-auto">
       {/* Room Header */}
