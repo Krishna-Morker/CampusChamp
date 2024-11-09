@@ -85,6 +85,9 @@ export default function Layout({ children }) {
           <Link href="/home/Leaderboard"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
             Leaderboard
           </Link>
+          <Link href="/home/Activity"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
+          See Activity
+          </Link>
           {isProf && (
             <Link href="/home/Attendance"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
               Attendance
