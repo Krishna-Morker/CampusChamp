@@ -1,21 +1,27 @@
 "use client";
 import axios from 'axios';
-import { use, useState, useEffect } from 'react';
+import { use,useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useSearchParams } from 'next/navigation'
 import Loader from '@/components/Loader';
+import Modal from '@/components/Modal';
 
 function Page({ params }) {
   const { id } = use(params);
   const [assignmentId, setAssignmentId] = useState(null);
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [inputValue, setInputValue] = useState('');
+  const [assignType, setAssignType] = useState(null);
   const searchParams = useSearchParams();
-  const type= searchParams.get('type')
+  const type = searchParams.get('type');
 
   useEffect(() => {
     if (id) setAssignmentId(id);
   }, [id]);
+
   const fetchStudentData = async () => {
     try {
       const ge = "present";
@@ -24,9 +30,8 @@ function Page({ params }) {
         type,
         ge,
       });
-    
-      setStudents(response.data); // Assuming response.data is an array of students
-      console.log(response.data);
+
+      setStudents(response.data);
       setLoading(false);
     } catch (error) {
       console.log("Error fetching student data:", error);
@@ -34,7 +39,6 @@ function Page({ params }) {
   };
 
   useEffect(() => {
-
     if (assignmentId) fetchStudentData();
   }, [assignmentId]);
 
@@ -56,66 +60,69 @@ function Page({ params }) {
     }
   };
 
-  const handleAssignGlobalPoints = async (isOnTime) => {
-    const points = prompt(`Enter points to assign to all ${isOnTime ? "on-time" : "late"} submissions:`);
-    if (!points || isNaN(points)) {
+  const handleAssignGlobalPoints = (isOnTime) => {
+    setAssignType({ isOnTime });
+    setModalMessage(`Enter points to assign to all ${isOnTime ? "on-time" : "late"} submissions:`);
+    setIsModalOpen(true);
+  };
+
+  const handleAssignExtraPoints = (studentId) => {
+    setAssignType({ studentId });
+    setModalMessage("Enter extra points to assign:");
+    setIsModalOpen(true);
+  };
+
+  const handleModalSubmit = async () => {
+    if (!inputValue || isNaN(inputValue)) {
       toast.error("Please enter a valid number.");
       return;
     }
-    const ge="addchall"
+
     try {
-      const response = await axios.post("/api/points", {
-        assignmentId,
-        points: parseInt(points, 10), // Convert to integer
-        isOnTime,
-        ge,
-      });
-      toast.success(response.data); // Notify the user about the success
-      // Refresh student data to reflect new points
-      fetchStudentData();
+      if (assignType.isOnTime !== undefined) {
+        // Global Points Assignment
+        const ge = "addchall";
+        const response = await axios.post("/api/points", {
+          assignmentId,
+          points: parseInt(inputValue, 10),
+          isOnTime: assignType.isOnTime,
+          ge,
+        });
+        toast.success(response.data);
+        fetchStudentData();
+      } else if (assignType.studentId) {
+        // Extra Points Assignment
+        const ge = "add";
+        const response = await axios.post("/api/points", {
+          studentId: assignType.studentId,
+          assignmentId,
+          points: parseInt(inputValue, 10),
+          ge,
+          type,
+        });
+        toast.success(response.data);
+        fetchStudentData();
+      }
     } catch (error) {
-      console.log("Error assigning global points:", error);
-      toast.error("Error assigning global points.");
+      console.log("Error assigning points:", error);
+      toast.error("Error assigning points.");
+    } finally {
+      setIsModalOpen(false);
+      setInputValue('');
     }
   };
 
-  const handleAssignExtraPoints = async (studentId) => {
-    const points = prompt("Enter extra points to assign:");
-    if (!points || isNaN(points)) {
-      toast.error("Please enter a valid number.");
-      return;
-    }
-      const ge="add"
-    try {
-      const response = await axios.post("/api/points", {
-        studentId,
-        assignmentId,
-        points: parseInt(points, 10),
-        ge,
-        type,
-      });
-      toast.success(response.data);
-      // Refresh student data to reflect new points
-      fetchStudentData();
-    } catch (error) {
-      console.log("Error assigning extra points:", error);
-      toast.error("Error assigning extra points.");
-    }
-  };
-
-  // Separate students into those who submitted on time and those who submitted late
-  const onTimeStudents = students.filter(student => 
+  const onTimeStudents = students.filter(student =>
     student.submissionDate && new Date(student.submissionDate) <= new Date(student.duedate)
   );
-  if(loading){
-    return <Loader/>
+
+  if (loading) {
+    return <Loader />;
   }
 
   return (
-    <div className="p-8 min-h-screen"
-    style={{ backgroundColor: '#242527' }}>
-      <div className="max-w-4xl mx-auto rounded-lg shadow-lg p-6"
-      style={{  backgroundColor: '#31363f'}}>
+    <div className="p-8 min-h-screen" style={{ backgroundColor: '#242527' }}>
+      <div className="max-w-4xl mx-auto rounded-lg shadow-lg p-6" style={{ backgroundColor: '#31363f' }}>
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold text-white-800">On-Time Submissions</h2>
@@ -171,6 +178,14 @@ function Page({ params }) {
           )}
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleModalSubmit}
+        mes={modalMessage}
+        setInputValue={setInputValue}
+        InputValue={inputValue}
+      />
     </div>
   );
 }

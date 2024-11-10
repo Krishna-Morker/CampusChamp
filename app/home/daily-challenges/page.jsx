@@ -69,11 +69,11 @@ const CoursesPage = () => {
       {courses.length === 0 ? (
         <h1 className='text-3xl font-bold text-center mb-9 text-white-800'>No Courses Available :)</h1>
       ) : (
-        <div className="grid gap-9 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-14 sm:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
               <div
               key={course._id}
-              className="p-8 rounded-xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl"
+              className="p-8 rounded-xl shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl flex flex-col"
               style={{  backgroundColor: '#31363f'}}
             >
              {(prof===1) ? (<button
@@ -88,7 +88,7 @@ const CoursesPage = () => {
                 Leave
               </button>)}
               <h2 className="text-2xl text-center font-semibold text-white-950 mb-4">{course.CourseName}</h2>
-              <div className="text-center">
+              <div className="text-center flex-grow">
         <p className="text-lg text-white-800 mb-2">
           <span className="font-semibold text-white-500">Professor: {course.ProfessorName}</span>
         </p>

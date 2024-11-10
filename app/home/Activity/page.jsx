@@ -6,6 +6,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
+import Loader from '@/components/Loader';
 
 const SeeActivities = () => {
   const [date, setDate] = useState(new Date());
@@ -13,6 +14,7 @@ const SeeActivities = () => {
   const [newTitle, setNewTitle] = useState('');
   const [newDetails, setNewDetails] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [activities, setActivities] = useState([]);
   const router = useRouter();
   const { user } = useUser();
@@ -33,6 +35,7 @@ const SeeActivities = () => {
         console.error('Error fetching all user activities', error);
       }
       setIsLoading(false);
+      setLoading((false))
     };
     fetchAllActivities();
   }, []);
@@ -86,6 +89,7 @@ const SeeActivities = () => {
           title: newTitle,
           details: newDetails,
         });
+      
       } catch (error) {
         console.error('Error adding activity', error);
       }
@@ -121,7 +125,7 @@ const SeeActivities = () => {
       console.error('Error deleting description', error);
     }
   };
-
+  if(loading)return <Loader/>
   return (
     <div className="bg-gray-900 text-white min-h-screen p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Activities for {date.toDateString()}</h1>

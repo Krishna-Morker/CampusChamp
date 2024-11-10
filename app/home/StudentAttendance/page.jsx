@@ -47,11 +47,11 @@ export default function StudentAttendancePage() {
             {courses.length === 0 ? (
                 <h1 className='text-3xl font-bold text-center mb-9 text-white'>No Courses Enrolled :)</h1>
             ) : (
-                <div className="grid gap-9 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-14 sm:grid-cols-2 lg:grid-cols-3">
                     {courses.map((course) => (
                         <div
                             key={course.course._id}
-                            className="relative p-8 rounded-xl shadow-2xl transition-transform transform hover:scale-105 hover:shadow-2xl"
+                            className="relative p-8 rounded-xl shadow-2xl transition-transform transform hover:scale-105 hover:shadow-2xl flex flex-col"
                             style={{ backgroundColor: '#31363f' }}
                         >
                             {/* Display Attendance Percentage in the top right corner */}
@@ -61,7 +61,7 @@ export default function StudentAttendancePage() {
                             <h2 className="text-3xl font-extrabold text-center text-white mb-7">
                                 {course.course.CourseName}
                             </h2>
-                            <div className="text-center">
+                            <div className="text-center flex-grow">
                                 <p className="text-lg text-white mb-2">
                                     <span className="font-semibold text-white">Professor: {course.course.ProfessorName}</span>
                                 </p>

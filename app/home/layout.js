@@ -169,9 +169,6 @@ export default function Layout({ children }) {
             <MenuItem onClick={handleMenuClose}>
               <Link href={{ pathname: '/home/daily-challenges', query: { type: 'monthly' } }}>Monthly Challenges</Link>
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
-              <Link href="/job-portal/my-applied-jobs">Friendly Challenges</Link>
-            </MenuItem>
           </Menu>
             
           {isModalOpen && (
