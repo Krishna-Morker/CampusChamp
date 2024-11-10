@@ -25,7 +25,7 @@ export default function Page() {
         console.error('Error fetching courses:', error);
       }
     };
-    fetchCourses();
+   if(user) fetchCourses();
   }, [user]);
 
   if (loading) return <Loader />;
