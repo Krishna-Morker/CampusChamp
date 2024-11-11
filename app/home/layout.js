@@ -88,6 +88,9 @@ export default function Layout({ children }) {
           <Link href="/home/Activity"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
           See Activity
           </Link>
+          <Link href="/home/WeeklyTimeTable"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
+          Timetable
+          </Link>
           {isProf && (
             <Link href="/home/Attendance"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
               Attendance
