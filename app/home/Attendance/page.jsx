@@ -64,7 +64,7 @@ if(loading){
   return (
     <div className="p-8 min-h-screen"
     style={{ backgroundColor: '#242527' }}>
-      <h1 className="text-5xl font-bold text-center mb-8 text-white-800">Take Attendance</h1>
+      <h1 className="text-5xl font-bold text-center mb-8 text-white-800">Attendance</h1>
       {courses.length === 0 ? (
         <h1 className='text-3xl font-bold text-center mb-9 text-white-800'>No Courses Available :)</h1>
       ) : (
@@ -97,13 +97,21 @@ if(loading){
           {course.Description || "No description provided for this course."}
         </p>
       </div>
-              <button
-                onClick={() => router.push(`/home/Attendance/${course._id}`)}
-                className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-150"
-              >
-                Take Attendance
-              </button>
-            </div>
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => router.push(`/home/Attendance/${course._id}`)}
+                  className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-150"
+                  >
+                  Take Attendance
+                </button>
+                <button
+                  onClick={() => router.push(`/home/Attendance/ViewAttendance/${course._id}`)}
+                  className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-150"
+                  >
+                  View Attendance
+                </button>
+              </div>
+        </div>
           ))}
         </div>
       )}
