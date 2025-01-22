@@ -57,7 +57,7 @@ const FriendlyChallengePage = () => {
               <h2 className="text-3xl font-extrabold text-center text-white-950 mb-7">Completed Challenges</h2>
               <div className="text-center flex-grow">
                 <p className="text-1xl font-normal text-white-900 leading-relaxed italic p-4">
-                Click below to see the reslts of the past friendly challenges.
+                Click below to see the results of the past friendly challenges.
                 </p>
             </div>
               <button
