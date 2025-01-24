@@ -102,6 +102,17 @@ export default function Layout({ children }) {
               Attendance
             </Link>
           )}
+          {isProf && (
+            <Link href="/home/Quiz"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
+              Quiz
+            </Link>
+          )}
+
+          {!isProf && (
+            <Link href="/home/StudentQuiz"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
+              Quiz
+            </Link>
+          )}
           
           {/* Menu Trigger Button */}
           <button
@@ -179,12 +190,6 @@ export default function Layout({ children }) {
           )}
           {isModalOpenRoom && (
             <CreateRoom isOpen={isModalOpenRoom} onClose={() => setisModalOpenRoom(false)} gh={showToast1} />
-          )}
-
-          {!isProf && (
-            <Link href="/home/FriendlyChallenge"  className="bg-transparent text-white rounded-md hover:bg-white hover:text-blue-600 transition duration-300">
-              Friendly Challenge
-            </Link>
           )}
         
              <Notification/>
