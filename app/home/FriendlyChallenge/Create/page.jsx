@@ -11,12 +11,18 @@ const CreateFriendlyChallenge = () => {
   const [students, setStudents] = useState([]);
   const [error, setError] = useState(null);
   const user = useUser();
+  const [questions, setQuestions] = useState([]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("Selected Topic:", selectedTopic);
     console.log("Selected Student:", selectedStudent);
     // Add further logic here (e.g., send data to a server)
+    
+    const topic = selectedTopic;
+    const ge="getQuestions";
+    const questions = await axios.post('/api/friendlychallenge', {ge , topic});
+    console.log(questions);
   };
 
   useEffect(() => {
@@ -25,7 +31,7 @@ const CreateFriendlyChallenge = () => {
       try {
         const response = await axios.get('/api/friendlychallenge');
         const filteredStudents = response.data.filter(student => student.clerkId !== user.user.id);
-        console.log(filteredStudents);
+        // console.log(filteredStudents);
         setStudents(filteredStudents);
         setError(null);
       } catch (err) {
