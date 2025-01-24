@@ -39,7 +39,7 @@ const CreateFriendlyChallenge = () => {
     try {
       const ge = "add";
       const response = await axios.post('/api/friendlychallenge', {ge , challenge});
-      console.log(response.data);
+      // console.log(response.data);
     } catch (err) {
       console.log(err);
     }
