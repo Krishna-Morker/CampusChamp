@@ -22,7 +22,27 @@ const CreateFriendlyChallenge = () => {
     const topic = selectedTopic;
     const ge="getQuestions";
     const questions = await axios.post('/api/friendlychallenge', {ge , topic});
-    console.log(questions);
+    // console.log(questions);
+
+    setQuestions(questions.data);
+
+    const dbUser = await axios.post('/api/user',user.user);
+    // console.log(dbUser.data)
+
+    const challenge = {
+      challengerId: dbUser.data._id,
+      challengedId: selectedStudent,
+      topic: selectedTopic,
+      questions: questions.data,
+    };
+
+    try {
+      const ge = "add";
+      const response = await axios.post('/api/friendlychallenge', {ge , challenge});
+      console.log(response.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {

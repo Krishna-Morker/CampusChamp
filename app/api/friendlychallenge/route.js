@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAllUsers } from "@/lib/actions/user.js"
 import { get10Questions } from "@/lib/actions/friendlychallenge.js"
+import { AddChallenge } from "@/lib/actions/friendlychallenge.js"
 
 export async function GET(){
     try{
@@ -21,6 +22,10 @@ export async function POST(req){
         if(ge==="getQuestions"){
             const questions = await get10Questions(body);
             return NextResponse.json(questions);
+        }
+        else if(ge==="add"){
+            const res=await AddChallenge(body);
+            return NextResponse.json(res);
         }
     }
     catch(error){
