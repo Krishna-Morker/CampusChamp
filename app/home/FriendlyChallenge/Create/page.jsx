@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Loader from '@/components/Loader';
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from 'next/navigation';
 
 const CreateFriendlyChallenge = () => {
   const [selectedTopic, setSelectedTopic] = useState("Miscellaneous");
@@ -12,6 +13,7 @@ const CreateFriendlyChallenge = () => {
   const [error, setError] = useState(null);
   const user = useUser();
   const [questions, setQuestions] = useState([]);
+  const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -40,6 +42,8 @@ const CreateFriendlyChallenge = () => {
       const ge = "add";
       const response = await axios.post('/api/friendlychallenge', {ge , challenge});
       // console.log(response.data);
+
+      router.push('/home/FriendlyChallenge/Pending');
     } catch (err) {
       console.log(err);
     }

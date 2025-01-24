@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAllUsers } from "@/lib/actions/user.js"
 import { get10Questions } from "@/lib/actions/friendlychallenge.js"
-import { AddChallenge } from "@/lib/actions/friendlychallenge.js"
+import { AddChallenge , getPendingChallenges } from "@/lib/actions/friendlychallenge.js"
 
 export async function GET(){
     try{
@@ -25,6 +25,11 @@ export async function POST(req){
         }
         else if(ge==="add"){
             const res=await AddChallenge(body);
+            return NextResponse.json(res);
+        }
+        else if(ge==="pending"){
+            // console.log("route",body);
+            const res=await getPendingChallenges(body);
             return NextResponse.json(res);
         }
     }
