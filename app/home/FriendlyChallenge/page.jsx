@@ -13,6 +13,13 @@ const FriendlyChallengePage = () => {
   return (
     <div className="p-8 min-h-screen"
     style={{ backgroundColor: '#242527' }}>
+      <div className="mb-8 text-center p-8 text-semibold">
+        <h1 className='text-4xl'>Friendly Challenge</h1>
+        <p>Here you can challenge any of your buddy, you need to just select the topic on which you want to challenge and the person whom you want to challenge.</p>
+        <p>Rest of the things would be taken care by us.</p>
+        <p>Random 10 questions would be given to both of you based on the yopic selected.</p>
+        <p>Let's see who wins the challenge!!</p>
+      </div>
         <div className="grid gap-14 sm:grid-cols-2 lg:grid-cols-3">
               <div
               className="p-8 rounded-xl shadow-2xl transition-transform transform hover:scale-105 hover:shadow-2xl flex flex-col"
