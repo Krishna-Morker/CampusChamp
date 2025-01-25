@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createQuiz } from "../../../lib/actions/quiz";
+import { createQuiz, fetchQuizzes } from "../../../lib/actions/quiz";
 
 export async function POST(request) {
     try {
@@ -10,7 +10,16 @@ export async function POST(request) {
         if (ge === "create") {
             const res = await createQuiz({body});
             return NextResponse.json(res);
-        } else {
+        } else if (ge === "fetch") {
+            const { courseId } = body;
+      
+            if (!courseId) {
+              return NextResponse.json({ error: "Missing courseId" });
+            }
+      
+            const quizzes = await fetchQuizzes({ courseId });
+            return NextResponse.json({ quizzes });
+          }else {
             return NextResponse.json({ error: "Invalid 'ge' parameter" });
         }
     } catch (error) {

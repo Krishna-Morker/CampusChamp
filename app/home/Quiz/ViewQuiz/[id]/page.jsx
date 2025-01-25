@@ -1,70 +1,82 @@
-"use client"
-import { use, useEffect, useState } from 'react'
-import Loader from '@/components/Loader';
-import axios from 'axios';
+"use client";
+import { use,useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // Use for navigation
+import axios from "axios";
+import { toast } from "react-toastify";
+import Loader from "@/components/Loader";
 
-export default function ViewAttendance({ params }) {
-    const { id } = use(params);
-    const [courseId, setCourseId] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [students, setStudents] = useState([]);
+function ViewQuizPage({ params }) {
+  const { id } = use(params); // Correctly extract courseId from route params
+  const [quizzes, setQuizzes] = useState([]); // Initialize quizzes as an empty array
+  const [loading, setLoading] = useState(true);
+  const router = useRouter(); // For navigation
 
-    useEffect(() => {
-        const fetchStudents = async () => {
-            setLoading(true);
-            try {
-                const ge = "percentage";
-                const response = await axios.post(`/api/attendance`, { id: courseId, ge });
-                console.log(response.data)
-                setStudents(response.data);
-            } catch (error) {
-                console.log("Error fetching students:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if(courseId) fetchStudents();
-    }, [courseId]);
-
-    useEffect(() => {
-        if (id) setCourseId(id);
-    }, [id]);
-
-    if (loading) {
-        return <Loader />;
+  useEffect(() => {
+    if (id) {
+      fetchQuizzes();
     }
+  }, [id]);
 
-    return (
-        <div className="flex justify-center items-start pt-8 h-screen bg-gray-900"
-            style={{ backgroundColor: '#242527' }}>
-            <table className="w-11/12 md:w-3/4 lg:w-2/3 max-w-4xl bg-gray-800 text-white shadow-md rounded-lg overflow-hidden">
-                <thead>
-                    <tr className="bg-gray-700">
-                        <th className="py-3 px-4 border-b-2 border-green-500 text-green-400">Avatar</th>
-                        <th className="py-3 px-4 border-b-2 border-green-500 text-green-400">Username</th>
-                        <th className="py-3 px-4 border-b-2 border-green-500 text-green-400">Email</th>
-                        <th className="py-3 px-4 border-b-2 border-green-500 text-green-400">Percentage Attendance</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {students.map((student, index) => {
-                        const isEvenRow = index % 2 === 0;
-                        const rowBgColor = isEvenRow ? 'bg-gray-800' : 'bg-gray-700';
+  const fetchQuizzes = async () => {
+    try {
+      const response = await axios.post(`/api/quiz`, {
+        ge: "fetch",
+        courseId: id,
+      });
+      setQuizzes(response.data.quizzes || []); // Default to empty array if undefined
+      setLoading(false);
+    } catch (error) {
+      toast.error("Failed to fetch quizzes.");
+      setQuizzes([]); // Set to empty array in case of error
+      setLoading(false);
+    }
+  };
 
-                        return (
-                            <tr key={student.clerkId || index} className={`${rowBgColor} hover:bg-gray-600`}>
-                                <td className="py-3 px-4 border-b border-gray-600 flex justify-center">
-                                    <img src={student.studentInfo.avatar} alt={student.studentInfo.username} className="w-10 h-10 rounded-full" />
-                                </td>
-                                <td className="py-3 px-4 border-b border-gray-600">{student.studentInfo.username || `${student.studentInfo.firstName} ${student.studentInfo.lastName}`}</td>
-                                <td className="py-3 px-4 border-b border-gray-600">{student.studentInfo.email}</td>
-                                <td className="py-3 px-4 border-b border-gray-600 text-center">{student.percentage}</td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-        </div>
-    );
+  const handleViewResult = (quizId) => {
+    // Find the selected quiz from the quizzes array
+    const selectedQuiz = quizzes.find((quiz) => quiz._id === quizId);
+  
+    if (selectedQuiz) {
+      // Navigate to the result page and pass the quiz data via query parameter
+      const quizData = JSON.stringify(selectedQuiz); // Stringify the selected quiz data
+  
+      // Pass quizId and quizData in the query string
+      router.push(`/home/Quiz/ViewQuiz/${id}/${quizId}`);
+    }
+  };
+  
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  return (
+    <div className="p-8 min-h-screen" style={{ backgroundColor: "#242527" }}>
+      <div className="max-w-3xl mx-auto rounded-lg shadow-lg p-6" style={{ backgroundColor: "#31363f" }}>
+        <h1 className="text-2xl font-semibold text-white-800 mb-6">View Quizzes</h1>
+
+        {quizzes.length === 0 ? (
+          <p className="text-white-600">No quizzes found for this course.</p>
+        ) : (
+          quizzes.map((quiz) => (
+            <div key={quiz._id} className="p-4 border rounded-md mb-4" style={{ backgroundColor: "#242527" }}>
+              <h3 className="text-white-700"><label className="text-green-500">Title:</label> {quiz.title}</h3>
+              <p className="text-white-600"><label className="text-green-500">Description:</label> {quiz.description}</p>
+              <p className="text-gray-400">
+                Start: {new Date(quiz.startTime).toLocaleString()} | End: {new Date(quiz.endTime).toLocaleString()}
+              </p>
+              <button
+                onClick={() => handleViewResult(quiz._id)} // Redirect to result page
+                className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                View Result
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
 }
+
+export default ViewQuizPage;
