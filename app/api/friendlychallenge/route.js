@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAllUsers } from "@/lib/actions/user.js"
 import { get10Questions } from "@/lib/actions/friendlychallenge.js"
-import { AddChallenge , getPendingChallenges , getSingleChallenge } from "@/lib/actions/friendlychallenge.js"
+import { AddChallenge , getPendingChallenges , getSingleChallenge , submitChallenge } from "@/lib/actions/friendlychallenge.js"
 
 export async function GET(){
     try{
@@ -35,6 +35,12 @@ export async function POST(req){
         else if(ge==="getSingle"){
             // console.log("route",body);
             const res=await getSingleChallenge(body);
+            return NextResponse.json(res);
+        }
+        else if(ge==="submit"){
+            console.log("route",body);
+            const res=await submitChallenge(body);
+            console.log("route" , res);
             return NextResponse.json(res);
         }
     }
