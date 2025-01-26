@@ -37,9 +37,6 @@ function ViewQuizPage({ params }) {
     const selectedQuiz = quizzes.find((quiz) => quiz._id === quizId);
   
     if (selectedQuiz) {
-      // Navigate to the result page and pass the quiz data via query parameter
-      const quizData = JSON.stringify(selectedQuiz); // Stringify the selected quiz data
-  
       // Pass quizId and quizData in the query string
       router.push(`/home/Quiz/ViewQuiz/${id}/${quizId}`);
     }

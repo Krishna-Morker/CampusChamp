@@ -1,125 +1,100 @@
 "use client";
-import React, { useState, useEffect, use } from 'react';
-import axios from 'axios';
+import { use,useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // Use for navigation
+import axios from "axios";
+import { toast } from "react-toastify";
+import Loader from "@/components/Loader";
 import { useUser } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
 
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import Loader from '@/components/Loader';
+function ViewQuizPage({ params }) {
+  const { paramsid } = use(params); // Correctly extract courseId from route params
+  const [quizzes, setQuizzes] = useState([]); // Initialize quizzes as an empty array
+  const [loading, setLoading] = useState(true);
+  const router = useRouter(); // For navigation
+  const { user } = useUser();
 
-export default function ViewAttendancePage({ params }) {
-    const router = useRouter();
-    const { paramsid } = use(params);
-    const { user } = useUser();
-    const [prof, isprof] = useState(0);
-    const [userId, setuserId] = useState(null);
-    const [courseId, setCourseId] = useState(null)
-    const [StudentAttendance, setStudentAttendance] = useState([])
-    const [presentDates, setPresentDates] = useState([])
-    const [absentDates, setAbsentDates] = useState([])
-    const [events, setEvents] = useState([])
-    const [loading, setLoading] = useState(true);
-
-    // Fetch Attendance from the backend
-    // Update dependencies for useEffect to ensure userId and courseId are set before fetching attendance
-    useEffect(() => {
-        const fetchAttendance = async () => {
-            if (!user || !courseId) return;  // Wait for user and courseId to be defined
-
-            try {
-                let p = user.id;
-                let id = await axios.post('/api/user', { id: p });
-                const fg = id.data._id;
-
-                setuserId(fg);
-                isprof(id.data.prof);
-
-                const ge = "viewattendance";
-                const attendance = await axios.post(`/api/attendance`, { courseId, userId: fg, ge });
-
-                if (attendance) setStudentAttendance(attendance.data);
-
-                const temp = attendance.data;
-
-                const pdates = temp.filter(record => record.status === "Present").map(record => record.date);
-                const pformattedDates = pdates.map(formatDate);
-                if (pformattedDates) setPresentDates(pformattedDates);
-
-                const adates = temp.filter(record => record.status === "Absent").map(record => record.date);
-                const aformattedDates = adates.map(formatDate);
-                if (aformattedDates) setAbsentDates(aformattedDates);
-
-                const allevents = [
-                    ...pformattedDates.map(date => ({
-                        title: "Present",
-                        start: date,
-                        color: "green"
-                    })),
-                    ...aformattedDates.map(date => ({
-                        title: "Absent",
-                        start: date,
-                        color: "red"
-                    }))
-                ];
-
-                if (allevents) setEvents(allevents);
-                setLoading(false);
-                console.log(allevents);
-            } catch (error) {
-                console.error('Error fetching attendance:', error);
-            }
-        };
-
-        fetchAttendance();
-    }, [courseId, user]);  // Add user to dependency array
-
-    useEffect(() => {
-        if (paramsid) setCourseId(paramsid);
-    }, [paramsid]);
-
-    // Helper function to format date consistently
-    function formatDate(dateStr) {
-        const date = new Date(dateStr);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+  useEffect(() => {
+    if (paramsid) {
+      fetchQuizzes();
     }
+  }, [paramsid]);
 
-    if(loading) return <Loader />
-    return (
-        <>
-       
-            <div className="calendarContainer">
-                <h1 className="calendarTitle text-4xl text-red-800 text-center font-extrabold largeText">Course Attendance</h1>
-                <div className='p-8 '>
+  const fetchQuizzes = async () => {
+    try {
+      const p = user.id;
+      const id = await axios.post('/api/user', { id: p });
+      const fg = id.data._id;
+      const response = await axios.post(`/api/quiz`, {
+        ge: "fetch",
+        courseId: paramsid,
+      });
+      const allQuizzes = response.data.quizzes || [];
+      const now = new Date();
 
-                <FullCalendar
-                    plugins={[dayGridPlugin]}
-                    initialView="dayGridMonth"
-                    events={events}
-                    headerToolbar={{
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'dayGridMonth,dayGridWeek,dayGridDay'
-                    }}
-                      dayHeaderContent={(date) => {
-                    const dayName = date.date.toLocaleString('en-US', { weekday: 'long' }); // Get the full day name
-                    return (
-                        <span className="text-black font-bold">{dayName}</span>
-                    );
-                }}
-                    eventContent={(eventInfo) => (
-                        <div className="custom-event" style={{ padding: '4px' }}>
-                            <span>{eventInfo.event.title}</span>
-                        </div>
-                    )}
-                    height="auto"
-                    contentHeight="auto"
-                    />
-                </div>
+      // Filter out quizzes that have already been attempted or are not within the time range
+      const filteredQuizzes = allQuizzes.filter((quiz) => {
+        const alreadyAttempted = quiz.attempts.some(
+          (attempt) => attempt.studentId === fg
+        );
+        const withinTimeRange =
+          new Date(quiz.startTime) <= now && now <= new Date(quiz.endTime);
+        return !alreadyAttempted && withinTimeRange;
+      });
+
+      setQuizzes(filteredQuizzes); // Default to empty array if undefined
+      setLoading(false);
+    } catch (error) {
+      toast.error("Failed to fetch quizzes.");
+      setQuizzes([]); // Set to empty array in case of error
+      setLoading(false);
+    }
+  };
+
+  const handleViewQuiz = (quizId) => {
+    // Find the selected quiz from the quizzes array
+    const selectedQuiz = quizzes.find((quiz) => quiz._id === quizId);
+  
+    if (selectedQuiz) {
+      // Navigate to the result page and pass the quiz data via query parameter
+      const quizData = JSON.stringify(selectedQuiz); // Stringify the selected quiz data
+  
+      // Pass quizId and quizData in the query string
+      router.push(`/home/StudentQuiz/${paramsid}/${quizId}`);
+    }
+  };
+  
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  return (
+    <div className="p-8 min-h-screen" style={{ backgroundColor: "#242527" }}>
+      <div className="max-w-3xl mx-auto rounded-lg shadow-lg p-6" style={{ backgroundColor: "#31363f" }}>
+        <h1 className="text-2xl font-semibold text-white-800 mb-6">View Quizzes</h1>
+
+        {quizzes.length === 0 ? (
+          <p className="text-white-600">No quizzes found for this course.</p>
+        ) : (
+          quizzes.map((quiz) => (
+            <div key={quiz._id} className="p-4 border rounded-md mb-4" style={{ backgroundColor: "#242527" }}>
+              <h3 className="text-white-700"><label className="text-green-500">Title:</label> {quiz.title}</h3>
+              <p className="text-white-600"><label className="text-green-500">Description:</label> {quiz.description}</p>
+              <p className="text-gray-400">
+                Start: {new Date(quiz.startTime).toLocaleString()} | End: {new Date(quiz.endTime).toLocaleString()}
+              </p>
+              <button
+                onClick={() => handleViewQuiz(quiz._id)} // Redirect to result page
+                className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Attempt
+              </button>
             </div>
-        </>
-    )
+          ))
+        )}
+      </div>
+    </div>
+  );
 }
+
+export default ViewQuizPage;
