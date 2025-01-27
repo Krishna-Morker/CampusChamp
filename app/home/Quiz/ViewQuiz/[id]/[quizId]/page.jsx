@@ -9,24 +9,26 @@ function QuizResultPage({ params }) {
   const { quizId } = use(params); // Extract quizId from params
   const [loading, setLoading] = useState(true);
   const [attempts, setAttempts] = useState([]);
+  const [totQue,setTotQue] = useState(0)
   const router = useRouter();
 
   useEffect(() => {
     if (quizId) {
-      fetchQuizData();
+      fetchQuizResults(); // Fetch quiz results when quizId is available
     }
   }, [quizId]);
 
-  const fetchQuizData = async () => {
+  const fetchQuizResults = async () => {
     try {
       const response = await axios.post(`/api/quiz`, {
-        ge: "fetchQuiz",
+        ge: "fetchQuizResults", // Triggering the fetchQuizResults route
         quizId,
       });
-      setAttempts(response.data?.attempts || []); // Get attempts from quiz data
+      setAttempts(response.data?.attempts || []); // Set attempts if available
+      setTotQue(response.data?.totalQuestions)
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching quiz results:", error);
       setAttempts([]);
       setLoading(false);
     }
@@ -44,19 +46,28 @@ function QuizResultPage({ params }) {
         {attempts.length === 0 ? (
           <p className="text-white-600">No attempts found for this quiz.</p>
         ) : (
-          attempts.map((attempt, index) => (
-            <div key={index} className="p-4 border rounded-md mb-4" style={{ backgroundColor: "#242527" }}>
-              <h3 className="text-white-700">
-                <label className="text-green-500">Student ID:</label> {attempt.studentId}
-              </h3>
-              <p className="text-white-600">
-                <label className="text-green-500">Score:</label> {attempt.score}
-              </p>
-              <p className="text-gray-400">
-                Attempted At: {new Date(attempt.attemptedAt).toLocaleString()}
-              </p>
-            </div>
-          ))
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left text-sm text-gray-400">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2">Student Name</th>
+                  <th className="px-4 py-2">Email</th>
+                  <th className="px-4 py-2">Score</th>
+                  <th className="px-4 py-2">Attempted At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {attempts.map((attempt, index) => (
+                  <tr key={index}>
+                    <td className="px-4 py-2">{attempt.studentName}</td> 
+                    <td className="px-4 py-2">{attempt.studentEmail}</td> 
+                    <td className="px-4 py-2">{attempt.score}/{totQue}</td>
+                    <td className="px-4 py-2">{new Date(attempt.attemptedAt).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>
@@ -64,4 +75,3 @@ function QuizResultPage({ params }) {
 }
 
 export default QuizResultPage;
-

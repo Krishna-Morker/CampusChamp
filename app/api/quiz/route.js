@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createQuiz, fetchQuizzes, fetchQuiz, submitQuizAttempt } from "../../../lib/actions/quiz";
+import { createQuiz, fetchQuizzes, fetchQuiz, submitQuizAttempt, fetchQuizResults } from "../../../lib/actions/quiz";
 
 export async function POST(request) {
     try {
@@ -25,6 +25,10 @@ export async function POST(request) {
             return NextResponse.json(res);
           }else if(ge === "submitAttempt"){
             const res = await submitQuizAttempt({body})
+            return NextResponse.json(res);
+          }else if (ge === "fetchQuizResults") { // New condition
+            const { quizId } = body;
+            const res = await fetchQuizResults({ quizId }); // Fetch the results using the controller function
             return NextResponse.json(res);
           }
           else {
