@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
-import Loader from '@/components/Loader';
+import axios from "axios";
+import Loader from "@/components/Loader";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 const CreateFriendlyChallenge = () => {
   const [selectedTopic, setSelectedTopic] = useState("Miscellaneous");
@@ -17,19 +17,13 @@ const CreateFriendlyChallenge = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Selected Topic:", selectedTopic);
-    console.log("Selected Student:", selectedStudent);
-    // Add further logic here (e.g., send data to a server)
-    
     const topic = selectedTopic;
-    const ge="getQuestions";
-    const questions = await axios.post('/api/friendlychallenge', {ge , topic});
-    // console.log(questions);
+    const ge = "getQuestions";
+    const questions = await axios.post("/api/friendlychallenge", { ge, topic });
 
     setQuestions(questions.data);
 
-    const dbUser = await axios.post('/api/user',user.user);
-    // console.log(dbUser.data)
+    const dbUser = await axios.post("/api/user", user.user);
 
     const challenge = {
       challengerId: dbUser.data._id,
@@ -40,10 +34,8 @@ const CreateFriendlyChallenge = () => {
 
     try {
       const ge = "add";
-      const response = await axios.post('/api/friendlychallenge', {ge , challenge});
-      // console.log(response.data);
-
-      router.push('/home/FriendlyChallenge/Pending');
+      await axios.post("/api/friendlychallenge", { ge, challenge });
+      router.push("/home/FriendlyChallenge/Pending");
     } catch (err) {
       console.log(err);
     }
@@ -53,9 +45,10 @@ const CreateFriendlyChallenge = () => {
     const fetchStudents = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('/api/friendlychallenge');
-        const filteredStudents = response.data.filter(student => student.clerkId !== user.user.id);
-        // console.log(filteredStudents);
+        const response = await axios.get("/api/friendlychallenge");
+        const filteredStudents = response.data.filter(
+          (student) => student.clerkId !== user.user.id
+        );
         setStudents(filteredStudents);
         setError(null);
       } catch (err) {
@@ -67,20 +60,28 @@ const CreateFriendlyChallenge = () => {
     fetchStudents();
   }, []);
 
-  if(loading) <Loader />
-  if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
+  if (loading) return <Loader />;
+  if (error) return <p className="text-red-400 text-center mt-4">{error}</p>;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="topic">Choose a topic:</label>
-      <div>
+    <form 
+      onSubmit={handleSubmit} 
+      className="max-w-xl mx-auto bg-gray-900 p-8 rounded-lg shadow-lg text-white space-y-6 mt-10"
+    >
+      <h1 className="text-2xl font-bold text-center text-gray-200">Create Friendly Challenge</h1>
+
+      <div className="flex flex-col">
+        <label htmlFor="topic" className="mb-2 text-lg font-medium text-gray-300">
+          Choose a Topic:
+        </label>
         <select
           id="topic"
           name="topic"
           value={selectedTopic}
           onChange={(e) => setSelectedTopic(e.target.value)}
           required
-          >
+          className="bg-gray-800 border border-gray-700 text-white rounded-md p-2 focus:ring-2 focus:ring-blue-500"
+        >
           <option value="Miscellaneous">Miscellaneous</option>
           <option value="React">React</option>
           <option value="Node">Node</option>
@@ -94,14 +95,18 @@ const CreateFriendlyChallenge = () => {
           <option value="OOPS">OOPS</option>
         </select>
       </div>
-      <div>
-        <label htmlFor="student">Select a Student:</label>
+
+      <div className="flex flex-col">
+        <label htmlFor="student" className="mb-2 text-lg font-medium text-gray-300">
+          Select a Student:
+        </label>
         <select
           id="student"
           name="student"
           value={selectedStudent}
           onChange={(e) => setSelectedStudent(e.target.value)}
           required
+          className="bg-gray-800 border border-gray-700 text-white rounded-md p-2 focus:ring-2 focus:ring-blue-500"
         >
           <option value="" disabled>
             -- Select a Student --
@@ -113,8 +118,14 @@ const CreateFriendlyChallenge = () => {
           ))}
         </select>
       </div>
-      <div>
-        <button type="submit">Submit</button>
+
+      <div className="text-center">
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+        >
+          Submit
+        </button>
       </div>
     </form>
   );

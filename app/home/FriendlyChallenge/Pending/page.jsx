@@ -17,25 +17,18 @@ const PendingFriendlyChallengePage = () => {
     async function fetchChallenges() {
       setLoading(true);
       try {
-        const dbUser = await axios.post('/api/user',user.user);
+        const dbUser = await axios.post('/api/user', user.user);
         const userData = dbUser.data;
-        // console.log(dbUser);
         
-        const ge="pending";
-        const response = await axios.post('/api/friendlychallenge',{ ge , userData });
-        // console.log(response);
-
+        const ge = "pending";
+        const response = await axios.post('/api/friendlychallenge', { ge, userData });
         const data = response.data;
         setChallenges(data);
-        // console.log(data,userData);
-
         
         const filteredChallenger = data.filter(item => item.challengerId._id === userData._id);
-        // console.log(filteredChallenger);
         setChallenger(filteredChallenger);
 
         const filteredChallenged = data.filter(item => item.challengedId._id === userData._id);
-        // console.log(filteredChallenged);
         setChallenged(filteredChallenged);
 
       } catch (error) {
@@ -47,103 +40,59 @@ const PendingFriendlyChallengePage = () => {
     fetchChallenges();
   }, []);
 
-
   if (loading) return <Loader />;
 
   return (
-    <div className="p-8 min-h-screen"
-    style={{ backgroundColor: '#242527' }}>
-      <div className="mb-8 text-center p-8 text-semibold">
-        <h1 className='text-4xl'>Pending Challenges</h1>
+    <div className="min-h-screen bg-gray-900 p-8 text-white">
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold text-gray-200">Pending Challenges</h1>
       </div>
-        <div>
-          <h1 className='text-4xl'>Challenger Challenges</h1>
-          {(challenger.length === 0) ? (<p>You have challenged no one</p>) : (
-            <div className="grid gap-14 sm:grid-cols-2 lg:grid-cols-3">
-                
-                <div>
-                  <h2>Challenge List</h2>
-                  <table border="1" style={{ width: "100%", textAlign: "left", marginTop: "20px" }}>
-                    <thead>
-                      <tr>
-                        <th>Topic</th>
-                        <th>Who You Challenged</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {challenger.map((challenge, index) => (
-                          <tr key={index}>
-                            <td>{challenge.topic}</td>
-                            <td>{challenge.challengedId.email}</td>
-                            <td>
-                              <button
-                                onClick={() => router.push(`/home/FriendlyChallenge/Pending/${challenge._id}`)}
-                                style={{
-                                  padding: "5px 10px",
-                                  backgroundColor: "#007bff",
-                                  color: "white",
-                                  border: "none",
-                                  borderRadius: "5px",
-                                  cursor: "pointer",
-                                }}
-                              >
-                                Take Challenge
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-
-            </div>
-          )}
-        </div>
-        <div>
-          <h1 className='text-4xl'>Challenged Challenges</h1>
-          {(challenged.length === 0) ? (<p>No one has Challenged you</p>) : (
-            <div className="grid gap-14 sm:grid-cols-2 lg:grid-cols-3">
-                  
-                  <div>
-                  <h2>Challenge List</h2>
-                  <table border="1" style={{ width: "100%", textAlign: "left", marginTop: "20px" }}>
-                    <thead>
-                      <tr>
-                        <th>Topic</th>
-                        <th>Who Challenged You</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {challenged.map((challenge, index) => (
-                          <tr key={index}>
-                            <td>{challenge.topic}</td>
-                            <td>{challenge.challengerId.email}</td>
-                            <td>
-                              <button
-                                onClick={() => router.push(`/home/FriendlyChallenge/Pending/${challenge._id}`)}
-                                style={{
-                                  padding: "5px 10px",
-                                  backgroundColor: "#007bff",
-                                  color: "white",
-                                  border: "none",
-                                  borderRadius: "5px",
-                                  cursor: "pointer",
-                                }}
-                              >
-                                Take Challenge
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-
-            </div>
-          )}
-        </div>
+      
+      {/* Challenger Challenges */}
+      <div className="mb-12">
+        <h2 className="text-3xl mb-4">Challenges You Created</h2>
+        {challenger.length === 0 ? (
+          <p className="text-lg text-gray-400">You have not challenged anyone yet.</p>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {challenger.map((challenge, index) => (
+              <div key={index} className="bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h3 className="text-xl font-semibold mb-2">{challenge.topic}</h3>
+                <p className="text-gray-400 mb-4">Challenged: {challenge.challengedId.email}</p>
+                <button
+                  onClick={() => router.push(`/home/FriendlyChallenge/Pending/${challenge._id}`)}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition"
+                >
+                  Take Challenge
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      
+      {/* Challenged Challenges */}
+      <div>
+        <h2 className="text-3xl mb-4">Challenges You Received</h2>
+        {challenged.length === 0 ? (
+          <p className="text-lg text-gray-400">No one has challenged you yet.</p>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {challenged.map((challenge, index) => (
+              <div key={index} className="bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h3 className="text-xl font-semibold mb-2">{challenge.topic}</h3>
+                <p className="text-gray-400 mb-4">Challenged by: {challenge.challengerId.email}</p>
+                <button
+                  onClick={() => router.push(`/home/FriendlyChallenge/Pending/${challenge._id}`)}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition"
+                >
+                  Take Challenge
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
