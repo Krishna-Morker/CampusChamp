@@ -4,9 +4,9 @@ import axios from "axios";
 import Pusher from 'pusher-js';
 import {use, useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
-import Page from '@/app/home/Room/Addtask/Page';
+import Page from '../../home/Room/Addtask/page';
 import { useRouter } from "next/navigation";
-import Loader from '@/components/Loader';
+import Loader from '../../../components/Loader';
 
 const RoomPage = ({ params }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

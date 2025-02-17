@@ -2,8 +2,8 @@
 import axios from 'axios';
 import { use,useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import Loader from '@/components/Loader';
-import Modal from '@/components/Modal'; // Adjust the path as necessary
+import Loader from '../../../../../components/Loader';
+import Modal from '../../../../../components/modal'; // Adjust the path as necessary
 
 function Page({ params }) {
   const { id } = use(params);

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {createroom,Pendingrequest,Acceptrequest,Deleterequest,Userroom,Getroom,Leftroom} from "@/lib/actions/study-room";
+import {createroom,Pendingrequest,Acceptrequest,Deleterequest,Userroom,Getroom,Leftroom} from "../../../lib/actions/study-room";
 
 
 export async function POST(req) {

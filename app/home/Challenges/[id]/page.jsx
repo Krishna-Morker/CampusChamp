@@ -3,8 +3,8 @@ import axios from 'axios';
 import { use,useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useSearchParams } from 'next/navigation'
-import Loader from '@/components/Loader';
-import Modal from '@/components/Modal';
+import Loader from '../../../../components/Loader';
+import Modal from '../../../../components/modal';
 
 function Page({ params }) {
   const { id } = use(params);

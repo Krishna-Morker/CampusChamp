@@ -1,4 +1,4 @@
-import {getUser} from '@/lib/actions/user';
+import {getUser} from '../../../lib/actions/user';
 import { NextResponse } from "next/server";
 
 export async function POST(request) {

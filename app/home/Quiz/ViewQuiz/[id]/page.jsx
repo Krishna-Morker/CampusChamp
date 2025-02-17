@@ -3,7 +3,7 @@ import { use,useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // Use for navigation
 import axios from "axios";
 import { toast } from "react-toastify";
-import Loader from "@/components/Loader";
+import Loader from "../../../../../components/Loader";
 
 function ViewQuizPage({ params }) {
   const { id } = use(params); // Correctly extract courseId from route params

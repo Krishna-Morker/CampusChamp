@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {setTimer,getTimer} from "@/lib/actions/study-room";
+import {setTimer,getTimer} from "../../../lib/actions/study-room";
 
 
 export async function POST(req) {

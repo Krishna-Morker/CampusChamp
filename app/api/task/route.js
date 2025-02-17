@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {addTask,remTask} from '@/lib/actions/task';
+import {addTask,remTask} from '../../../lib/actions/task';
 
 export async function POST(request) {
     try {

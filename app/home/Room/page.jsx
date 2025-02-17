@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
-import Loader from '@/components/Loader';
+import Loader from '../../../components/Loader';
 
 const AcceptedRoomsPage = () => {
   const [acceptedRooms, setAcceptedRooms] = useState([]);

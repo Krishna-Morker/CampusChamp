@@ -1,6 +1,6 @@
 "use client"
 import { use, useEffect, useState } from 'react'
-import Loader from '@/components/Loader';
+import Loader from '../../../../../components/Loader';
 import axios from 'axios';
 
 export default function ViewAttendance({ params }) {

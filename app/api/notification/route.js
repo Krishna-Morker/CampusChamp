@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getNotifi,markAllNotifications } from "@/lib/actions/notification";
+import { getNotifi,markAllNotifications } from "../../../lib/actions/notification";
 
 
 export async function POST(req){

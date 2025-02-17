@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {Getmessage,Allmessage} from "@/lib/actions/message";
+import {Getmessage,Allmessage} from "../../../lib/actions/message";
 
 
 export async function POST(req) {

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Loader from "@/components/Loader";
+import Loader from "../../../components/Loader";
 
 const FriendlyChallengePage = () => {
   const router = useRouter();

@@ -2,8 +2,8 @@
 import axios from 'axios';
 import {use, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import Loader from '@/components/Loader';
-import Modal from '@/components/Modal';
+import Loader from '../../../../components/Loader';
+import Modal from '../../../../components/modal';
 
 function AttendancePage({ params }) {
   const [students, setStudents] = useState([]);

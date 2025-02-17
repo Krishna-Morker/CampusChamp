@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {Addcourse, Getcourse, Mycourse, Addstudent,Removestudent,DeletCourse, Getstudent} from "@/lib/actions/course"
+import {Addcourse, Getcourse, Mycourse, Addstudent,Removestudent,DeletCourse, Getstudent} from "../../../lib/actions/course"
 
 export async function DELETE(request) {
   try {

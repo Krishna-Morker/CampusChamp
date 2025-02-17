@@ -3,7 +3,7 @@
 import { use,useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import Loader from "@/components/Loader";
+import Loader from "../../../../../components/Loader";
 import { useUser } from '@clerk/nextjs';
 
 function AttemptQuizPage({ params }) {
