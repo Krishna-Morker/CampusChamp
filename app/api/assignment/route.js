@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {Addassignment,getAssigment,Addstudent,delStudent,Absentass,presentAss,remAss,remAssignment} from "@/lib/actions/assignment"
+import {Addassignment,getAssigment,Addstudent,delStudent,Absentass,presentAss,remAss,remAssignment} from "../../../lib/actions/assignment"
 
 export async function POST(request) {
     try {

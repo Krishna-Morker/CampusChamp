@@ -4,7 +4,7 @@ import axios from "axios";
 import { useUser } from '@clerk/nextjs';
 import { FaPlus, FaTrash } from 'react-icons/fa'; // Import icons for add and delete
 
-import Loader from '@/components/Loader';
+import Loader from '../../../components/Loader';
 
 const TimetablePage = () => {
   const [timetable, setTimetable] = useState({});

@@ -6,7 +6,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import Loader from '@/components/Loader';
+import Loader from '../../../components/Loader';
 
 const SeeActivities = () => {
   const [date, setDate] = useState(new Date());

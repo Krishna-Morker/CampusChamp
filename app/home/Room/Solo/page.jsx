@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-
 const SoloStudyPage = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");

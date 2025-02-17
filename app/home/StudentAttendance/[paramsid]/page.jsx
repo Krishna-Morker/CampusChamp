@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import Loader from '@/components/Loader';
+import Loader from '../../../../components/Loader';
 import styles from './ViewAttendancePage.module.css';
 
 export default function ViewAttendancePage({ params }) {

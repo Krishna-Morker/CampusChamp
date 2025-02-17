@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useUser } from '@clerk/nextjs';
 import axios from "axios";
-import Loader from '@/components/Loader';
+import Loader from '../../../../components/Loader';
 
 const Request = () => {
   const { user } = useUser();

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/solid'; // For the close icon
 import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
-import { useEdgeStore } from '@/lib/edgestore';
+import { useEdgeStore } from '../../../../lib/edgestore';
 import { toast } from 'react-toastify';
 import { fileURLToPath } from 'url';
 

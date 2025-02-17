@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
-import Loader from '@/components/Loader';
+import Loader from '../../../components/Loader';
 
 export default function StudentAttendancePage() {
     const router = useRouter();

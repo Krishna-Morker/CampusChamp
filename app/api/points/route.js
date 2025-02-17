@@ -1,4 +1,4 @@
-import {incPoints,Points,ChallengePoints} from '@/lib/actions/points';
+import {incPoints,Points,ChallengePoints} from '../../../lib/actions/points';
 import { NextResponse } from "next/server";
 
 export async function POST(request) {

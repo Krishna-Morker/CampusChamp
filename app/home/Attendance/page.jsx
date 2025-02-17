@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { set } from 'mongoose';
 import { useRouter } from 'next/navigation';
-import Loader from '@/components/Loader';
+import Loader from '../../../components/Loader';
 
 const CoursesPage = () => {
   const router = useRouter();

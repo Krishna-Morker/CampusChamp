@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Loader from "@/components/Loader";
+import Loader from "../../../../components/Loader";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 

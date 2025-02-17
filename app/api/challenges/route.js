@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {Addchallenge,getChallenges,Addstudent,delStudent,presentChallenges,remChal,remChallenges} from "@/lib/actions/challenges"
+import {Addchallenge,getChallenges,Addstudent,delStudent,presentChallenges,remChal,remChallenges} from "../../../lib/actions/challenges"
 
 export async function POST(request) {
     try {

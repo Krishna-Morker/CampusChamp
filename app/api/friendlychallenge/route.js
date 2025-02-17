@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { getAllUsers } from "@/lib/actions/user.js"
-import { get10Questions } from "@/lib/actions/friendlychallenge.js"
-import { AddChallenge , getPendingChallenges , getSingleChallenge , submitChallenge , getCompletedChallenges } from "@/lib/actions/friendlychallenge.js"
+import { getAllUsers } from "../../../lib/actions/user.js"
+import { get10Questions } from "../../../lib/actions/friendlychallenge.js"
+import { AddChallenge , getPendingChallenges , getSingleChallenge , submitChallenge , getCompletedChallenges } from "../../../lib/actions/friendlychallenge.js"
 
 export async function GET(){
     try{

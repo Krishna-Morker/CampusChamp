@@ -1,4 +1,4 @@
-import pusher from '@/lib/actions/pusherConfig'
+import pusher from '../../../lib/actions/pusherConfig'
 import { NextResponse } from "next/server";
 
 export async function POST(req) {

@@ -1,12 +1,12 @@
 "use client";
 import { use, useState, useEffect } from 'react';
 import axios from 'axios';
-import Page from '@/app/home/daily-challenges/Addchallenges/Page';
+import Page from '../../../home/daily-challenges/Addchallenges/Page';
 import { toast } from 'react-toastify';
 import { useUser } from '@clerk/nextjs';
 import { useEdgeStore } from '@/lib/edgestore';
 import { useRouter } from 'next/navigation';
-import Loader from '@/components/Loader';
+import Loader from '../../../../components/Loader';
 import { useSearchParams } from 'next/navigation'
 
 const AssignmentsPage = ({ params }) => {

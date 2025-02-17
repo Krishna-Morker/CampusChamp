@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import Loader from "@/components/Loader";
+import Loader from "../../../../../../components/Loader";
 
 function QuizResultPage({ params }) {
   const { quizId } = use(params); // Extract quizId from params
