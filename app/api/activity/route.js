@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"; 
-import { getActivity, createActivity, updateActivity, deleteActivity,getAllUserActivities } from "../../../lib/actions/activity";
+import { getActivity, createActivity, deleteActivity,getAllUserActivities } from "../../../lib/actions/activity";
 
 export async function POST(request) {
     try {
