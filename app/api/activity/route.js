@@ -18,9 +18,6 @@ export async function POST(request) {
          else if (ge === "create") {
             const res = await createActivity({body});
             return NextResponse.json(res);
-        } else if (ge === "update") {
-            const res = await updateActivity({body});
-            return NextResponse.json(res);
         } else if (ge === "delete") {
             const res = await deleteActivity({body});
             return NextResponse.json(res);
