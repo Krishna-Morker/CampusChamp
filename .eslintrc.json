@@ -5,8 +5,8 @@
     "ecmaVersion": 2022,
     "sourceType": "module"
   },
-  "rules": {
-    // your global rules …
+ "rules": {
+    "react/no-unescaped-entities": "off"
   },
   "overrides": [
     {
