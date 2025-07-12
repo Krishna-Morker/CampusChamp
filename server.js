@@ -1,7 +1,8 @@
-const express = require('express');
-const next = require('next');
-const http = require('http');
-const { Server } = require('socket.io');
+import express from 'express';
+import next from 'next';
+import http from 'http';
+import { Server } from 'socket.io';
+
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
