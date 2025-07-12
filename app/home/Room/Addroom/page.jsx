@@ -4,7 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 
-export default function CreateRoom({ isOpen, onClose, gh }){
+const CreateRoom = ({ isOpen, onClose, gh }) => {
   const [roomName, setRoomName] = useState("");
   const [roomDescription, setRoomDescription] = useState("");
   const [allUsers, setAllUsers] = useState([]);
@@ -158,3 +158,4 @@ export default function CreateRoom({ isOpen, onClose, gh }){
   );
 };
 
+export default CreateRoom;
