@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "type": "module",
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.0.54",
     "@clerk/nextjs": "^6.0.2",
